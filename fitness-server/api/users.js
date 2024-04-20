@@ -37,4 +37,21 @@ router.get('/:userId', (req, res) => {
     });
 });
 
+// Felhasználó bejelentkeztetése
+router.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+    db.query(query, [username, password], (error, results) => {
+        if (error) {
+            return res.status(500).json({ success: false, message: 'Hiba történt a bejelentkezés közben.' });
+        }
+        if (results.length === 0) {
+            return res.status(401).json({ success: false, message: 'Hibás felhasználónév vagy jelszó.' });
+        }
+        const user = results[0];
+        return res.json({ success: true, message: 'Sikeres bejelentkezés.', user: user });
+    });
+});
+
+
 module.exports = router;
