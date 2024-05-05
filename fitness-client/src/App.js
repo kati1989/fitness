@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
-import Users from './Users';
+import UsersList from './UsersList';
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -14,7 +14,7 @@ function App() {
             {!loggedIn ? (
                 <LoginForm onLogin={handleLogin} />
             ) : (
-                <Users />
+                <UsersList />
             )}
         </div>
     );

@@ -53,5 +53,29 @@ router.post('/login', (req, res) => {
     });
 });
 
+// Elmenti a felhasználó adatait
+// Felhasználó adatainak frissítése a megadott userId alapján
+router.post('/update/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const { first_name, last_name, birth_date } = req.body;
+
+    const birthDate = new Date(birth_date).toISOString().slice(0, 19).replace('T', ' ');
+
+
+    // Az SQL lekérdezés összeállítása
+    const query = 'UPDATE users SET first_name = ?, last_name = ?, birth_date = ? WHERE id = ?';
+
+    // A lekérdezés végrehajtása a db.query metódussal
+    db.query(query, [first_name, last_name, birthDate, userId], (err, results) => {
+        if (err) {
+            // Hiba esetén küldünk egy hibaüzenetet
+            console.error('Hiba történt a felhasználó adatainak frissítése közben:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        // Sikeres módosítás esetén visszaküldjük az eredményt
+        res.json({ success: true, message: 'Felhasználó adatainak frissítése sikeres.' });
+    });
+});
 
 module.exports = router;
