@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import {getUsers} from "./api/usersApi";
 import UserEdit from './UserEdit';
 
@@ -37,14 +39,17 @@ function UsersList() {
             ) : (
                 <div>
                     <h1>Felhasználók listája</h1>
-                    <ul>
-                        {users.map(user => (
-                            <li key={user.id}>
-                                {`${user.first_name} ${user.last_name}`}
-                                <button onClick={() => handleEdit(user)}>Szerkesztés</button>
-                            </li>
-                        ))}
-                    </ul>
+                    <DataTable value={users}>
+                        <Column field="username" header="Felhasználónév" />
+                        <Column field="first_name" header="Keresztnév" />
+                        <Column field="last_name" header="Vezetéknév" />
+                        <Column
+                            header="Műveletek"
+                            body={(rowData) => (
+                                <button onClick={() => handleEdit(rowData)}>Szerkesztés</button>
+                            )}
+                        />
+                    </DataTable>
                 </div>
             )}
         </div>

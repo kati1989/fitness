@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './css/loginForm.css'; // CSS fájl importálása
+import { InputText } from "primereact/inputtext";
+import { Password } from 'primereact/password';
+
 
 function LoginForm({ onLogin }) {
     const [username, setUsername] = useState('');
@@ -30,14 +33,13 @@ function LoginForm({ onLogin }) {
                 <div className="card-body">
                     <h2 className="card-title text-center">Login</h2>
                     <form>
-                        <div className="form-group">
+                        <div className="card flex justify-content-center">
                             <label htmlFor="username">Felhasználónév:</label>
-                            <input id="username" type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            <InputText value={username} onChange={(e) => setUsername(e.target.value)} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Jelszó:</label>
-                            <input id="password" type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        </div>
+                            <Password value={password} onChange={(e) => setPassword(e.target.value)} feedback={false} tabIndex={1} />                        </div>
                         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                         <button type="button" className="btn btn-primary btn-block" onClick={handleLogin}>Login</button>
                     </form>
