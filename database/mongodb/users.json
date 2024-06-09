@@ -1,0 +1,162 @@
+[
+  {
+    "first_name": "John",
+    "last_name": "Doe",
+    "username": "johndoe",
+    "password": "password123",
+    "birth_date": "1990-01-01",
+    "address_id": 1
+  },
+  {
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "username": "janesmith",
+    "password": "password456",
+    "birth_date": "1985-05-10",
+    "address_id": 2
+  },
+  {
+    "first_name": "Alice",
+    "last_name": "Johnson",
+    "username": "alicej",
+    "password": "password789",
+    "birth_date": "1978-02-20",
+    "address_id": 3
+  },
+  {
+    "first_name": "Bob",
+    "last_name": "Brown",
+    "username": "bobb",
+    "password": "password101",
+    "birth_date": "1995-07-15",
+    "address_id": 4
+  },
+  {
+    "first_name": "Charlie",
+    "last_name": "Davis",
+    "username": "charlied",
+    "password": "password102",
+    "birth_date": "1982-12-22",
+    "address_id": 5
+  },
+  {
+    "first_name": "Emily",
+    "last_name": "Clark",
+    "username": "emilyc",
+    "password": "password103",
+    "birth_date": "1991-11-30",
+    "address_id": 6
+  },
+  {
+    "first_name": "Frank",
+    "last_name": "Miller",
+    "username": "frankm",
+    "password": "password104",
+    "birth_date": "1980-03-17",
+    "address_id": 7
+  },
+  {
+    "first_name": "Grace",
+    "last_name": "Lee",
+    "username": "gracel",
+    "password": "password105",
+    "birth_date": "1975-08-25",
+    "address_id": 8
+  },
+  {
+    "first_name": "Henry",
+    "last_name": "Walker",
+    "username": "henryw",
+    "password": "password106",
+    "birth_date": "1989-06-12",
+    "address_id": 9
+  },
+  {
+    "first_name": "Isabella",
+    "last_name": "Hall",
+    "username": "isabellah",
+    "password": "password107",
+    "birth_date": "1988-09-05",
+    "address_id": 10
+  },
+  {
+    "first_name": "Jack",
+    "last_name": "Young",
+    "username": "jacky",
+    "password": "password108",
+    "birth_date": "1992-04-28",
+    "address_id": 1
+  },
+  {
+    "first_name": "Kate",
+    "last_name": "King",
+    "username": "katek",
+    "password": "password109",
+    "birth_date": "1983-07-09",
+    "address_id": 2
+  },
+  {
+    "first_name": "Liam",
+    "last_name": "Scott",
+    "username": "liams",
+    "password": "password110",
+    "birth_date": "1994-02-14",
+    "address_id": 3
+  },
+  {
+    "first_name": "Mia",
+    "last_name": "Adams",
+    "username": "miaa",
+    "password": "password111",
+    "birth_date": "1986-10-20",
+    "address_id": 4
+  },
+  {
+    "first_name": "Noah",
+    "last_name": "Baker",
+    "username": "noahb",
+    "password": "password112",
+    "birth_date": "1990-05-30",
+    "address_id": 5
+  },
+  {
+    "first_name": "Olivia",
+    "last_name": "Harris",
+    "username": "oliviah",
+    "password": "password113",
+    "birth_date": "1979-12-01",
+    "address_id": 6
+  },
+  {
+    "first_name": "Paul",
+    "last_name": "Nelson",
+    "username": "pauln",
+    "password": "password114",
+    "birth_date": "1987-03-08",
+    "address_id": 7
+  },
+  {
+    "first_name": "Quinn",
+    "last_name": "Mitchell",
+    "username": "quinnm",
+    "password": "password115",
+    "birth_date": "1984-01-22",
+    "address_id": 8
+  },
+  {
+    "first_name": "Ryan",
+    "last_name": "Perez",
+    "username": "ryanp",
+    "password": "password116",
+    "birth_date": "1981-06-18",
+    "address_id": 9
+  },
+  {
+    "first_name": "Sophia",
+    "last_name": "Roberts",
+    "username": "sophiar",
+    "password": "password117",
+    "birth_date": "1976-11-03",
+    "address_id": 10
+  }
+]
