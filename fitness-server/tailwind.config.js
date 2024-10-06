@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: ['./views/**/*.mustache'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./views/**/*.ejs'], // EJS fájlok elérési útja
+  darkMode: false, // vagy 'media' vagy 'class'
   theme: {
     extend: {},
   },

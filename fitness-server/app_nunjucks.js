@@ -1,18 +1,35 @@
+// app.js
 const express = require('express');
-const nunjucks = require('nunjucks');
 const path = require('path');
 const bodyParser = require('body-parser');
-const { connection, connect } = require('./db');
+const session = require('express-session');
+const { connect } = require('./db'); // Felteszem, hogy ez az adatbázis csatlakozási modul
+const authRoutes = require('./routes/authRoutes'); // Bejelentkezés és regisztráció
+const userRoutes = require('./routes/userRoutes'); // Felhasználói funkciók
+const nunjucks = require('nunjucks');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Nunjucks templating engine beállítása
-nunjucks.configure('views/nunjucks', {
+const env = nunjucks.configure(  path.resolve(__dirname,'views/nunjucks'), {
     autoescape: true,
-    express: app
+    express: app,
+    watch: true // Opció a sablonok automatikus újratöltéséhez fejlesztés alatt
 });
-app.set('view engine', 'njk');
+
+// Egyedi dátum formázás filter hozzáadása
+env.addFilter('formatDate', function(date) {
+    const formattedDate = new Date(date).toISOString().split('T')[0].replace(/-/g, '.');
+    return formattedDate;
+});
+
+app.engine ('njk', nunjucks.render);
+
+
+
+// Nunjucks beállítása, hogy a .njk fájlokat is felismerje
+app.set('view engine', 'njk'); // Beállítjuk, hogy a .njk kiterjesztést használja
 
 // Statikus fájlok kiszolgálása
 app.use(express.static(path.join(__dirname, 'public')));
@@ -20,48 +37,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Body parser
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Session beállítása kezdeti értékekkel
+app.use(session({
+    secret: 'secret-key', // Állítsd be egy erős titokra
+    resave: false,
+    saveUninitialized: false
+}));
+
 // Adatbázis kapcsolat tesztelése és indítása
 connect().then(() => {
-    // Felhasználók listázása
-    app.get('/users', (req, res) => {
-        const query = 'SELECT * FROM users';
-        connection.query(query, (error, results) => {
-            if (error) {
-                console.error('Hiba:', error);
-                return res.status(500).send('Hiba történt a felhasználók lekérdezésekor');
-            }
-            res.render('usersList', { users: results });
-        });
-    });
+    app.use('/', authRoutes);  // Bejelentkezés és regisztráció útvonalai
+    app.use('/users', userRoutes);   // Felhasználói útvonalak
 
-    // Felhasználó szerkesztése
-    app.get('/users/edit/:id', (req, res) => {
-        const query = 'SELECT * FROM users WHERE id = ?';
-        connection.query(query, [req.params.id], (error, results) => {
-            if (error) {
-                console.error('Hiba:', error);
-                return res.status(500).send('Hiba történt a felhasználó lekérdezésekor');
-            }
-            if (results.length === 0) {
-                return res.status(404).send('Felhasználó nem található');
-            }
-            res.render('userEdit', { user: results[0] });
-        });
-    });
-
-    // Felhasználó szerkesztés mentése
-    app.post('/users/edit/:id', (req, res) => {
-        const { username, first_name, last_name, birth_date } = req.body;
-        const query = 'UPDATE users SET username = ?, first_name = ?, last_name = ?, birth_date = ? WHERE id = ?';
-        connection.query(query, [username, first_name, last_name, birth_date, req.params.id], (error) => {
-            if (error) {
-                console.error('Hiba:', error);
-                return res.status(500).send('Hiba történt a felhasználó mentésekor');
-            }
-            res.redirect('/users');
-        });
-    });
-
+    // Szerver indítása
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });

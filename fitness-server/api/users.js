@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../db');
+const { connection } = require('../db');
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     const query = 'SELECT * FROM users';
 
-    db.query(query, (err, results) => {
+    connection.query(query, (err, results) => {
         if (err) {
             console.error('Hiba a lekérdezés végrehajtása közben: ' + err.stack);
             res.status(500).send('Internal Server Error');
@@ -23,7 +23,7 @@ router.get('/:userId', (req, res) => {
 
     const query = 'SELECT * FROM users WHERE id = ?';
 
-    db.query(query, [userId], (err, results) => {
+    connection.query(query, [userId], (err, results) => {
         if (err) {
             console.error('Hiba a lekérdezés végrehajtása közben: ' + err.stack);
             res.status(500).send('Internal Server Error');
@@ -41,7 +41,7 @@ router.get('/:userId', (req, res) => {
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
     const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-    db.query(query, [username, password], (error, results) => {
+    connection.query(query, [username, password], (error, results) => {
         if (error) {
             return res.status(500).json({ success: false, message: 'Hiba történt a bejelentkezés közben.' });
         }
@@ -66,7 +66,7 @@ router.post('/update/:userId', (req, res) => {
     const query = 'UPDATE users SET first_name = ?, last_name = ?, birth_date = ? WHERE id = ?';
 
     // A lekérdezés végrehajtása a db.query metódussal
-    db.query(query, [first_name, last_name, birthDate, userId], (err, results) => {
+    connection.query(query, [first_name, last_name, birthDate, userId], (err, results) => {
         if (err) {
             // Hiba esetén küldünk egy hibaüzenetet
             console.error('Hiba történt a felhasználó adatainak frissítése közben:', err);
