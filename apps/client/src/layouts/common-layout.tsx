@@ -4,16 +4,20 @@ import { Navigation } from "@/components/Navigation";
 import { Container } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
-export const CommonLayout = () => {
+interface CommonLayoutProps {
+  showFooter?: boolean;
+}
+
+export const CommonLayout = ({ showFooter }: CommonLayoutProps) => {
   return (
     <>
       <Header>
         <Navigation />
       </Header>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ pb: 3 }}>
         <Outlet />
       </Container>
-      <Footer color="primary" />
+      {showFooter && <Footer color="primary" />}{" "}
     </>
   );
 };

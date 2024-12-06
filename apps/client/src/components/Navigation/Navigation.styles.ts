@@ -10,13 +10,9 @@ export const navigationStyles = (theme: Theme) => ({
   },
   navLink: {
     textDecoration: "none",
-    color: theme.palette.background.default,
-    "&:hover": {
-      color: theme.palette.primary.main,
-    },
+    color: theme.palette.text.primary,
   },
   navLinkActive: {
-    color: theme.palette.secondary.main,
-    fontWeight: theme.typography.fontWeightBold,
+    color: theme.palette.primary.main,
   },
 });

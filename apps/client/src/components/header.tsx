@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ children }) => {
   return (
-    <Box sx={{ backgroundColor: theme.palette.primary.main }}>
+    <Box sx={{ borderBottom: 1, borderColor: theme.palette.divider }}>
       <Container maxWidth="md">
         <header>{children}</header>
       </Container>
