@@ -1,11 +1,19 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
-    "esModuleInterop": true,
-    "outDir": "dist"
+    "skipLibCheck": true,
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "outDir": "./dist",
+    "baseUrl": "../..",
+    "rootDir": "../..",
+    "paths": {
+      "@server/*": ["apps/server/src/application/*"]
+    }
   },
-  "include": ["src"]
+  "extends": "../../tsconfig.base.json"
 }

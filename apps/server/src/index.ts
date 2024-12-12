@@ -1,16 +1,5 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { hc } from "hono/client";
+import type { AppType } from "./application/application";
 
-const app = new Hono()
-
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-const port = 3000
-console.log(`Server is running on http://localhost:${port}`)
-
-serve({
-  fetch: app.fetch,
-  port
-})
+export { AppType };
+export const ApiClient = (url: string) => hc<AppType>(url);
