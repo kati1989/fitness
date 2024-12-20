@@ -4,6 +4,7 @@ import { Register } from "@/pages/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "@/pages/Login";
 import { AuthenticationLayout } from "@/layouts/authentication-layout";
+import { NotFound } from "./pages/NotFound/NotFound";
 
 export const AppRouter = () => {
   return (
@@ -11,6 +12,7 @@ export const AppRouter = () => {
       <Routes>
         <Route element={<CommonLayout showFooter />}>
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         <Route element={<CommonLayout />}>

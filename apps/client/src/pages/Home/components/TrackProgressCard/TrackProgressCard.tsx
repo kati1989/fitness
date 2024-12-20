@@ -7,9 +7,12 @@ import { Card } from "@/components/Card";
 
 const steps = ["Set goals", "Stay consistent", "Push limits"];
 
-export const TrackProgressCard = () => {
+interface TrackProgressCardProps {
+  delay?: number;
+}
+export const TrackProgressCard = ({ delay }: TrackProgressCardProps) => {
   return (
-    <Card title="Track progress">
+    <Card title="Track progress" delay={delay}>
       <Grid container spacing={1}>
         <Grid size={2}>
           <IconFlag />

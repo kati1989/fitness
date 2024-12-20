@@ -5,10 +5,11 @@ import { Avatar, CardHeader, Rating, Stack, Typography } from "@mui/material";
 
 interface CardProps {
   value: number;
+  delay?: number;
 }
-export const PersonalCoachCard = ({ value }: CardProps) => {
+export const PersonalCoachCard = ({ value, delay }: CardProps) => {
   return (
-    <Card title="Get yourself a personal coach" variant="primary">
+    <Card title="Get yourself a personal coach" variant="primary" delay={delay}>
       <Stack spacing={2}>
         <Stack gap={1}>
           <IconFitnessCenter />

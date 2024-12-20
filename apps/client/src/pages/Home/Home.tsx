@@ -67,10 +67,16 @@ export const Home = () => {
               <Grid size={{ md: 2.3 }}>
                 <Stack gap={3}>
                   <PersonalCoachCard value={3.5} />
+                  <TrackProgressCard delay={0.5} />
+                  <PersonalCoachCard value={3.5} delay={1} />
                 </Stack>
               </Grid>
               <Grid size={2.3}>
-                <TrackProgressCard />
+                <Stack gap={3}>
+                  <TrackProgressCard />
+                  <PersonalCoachCard value={3.5} delay={1.5} />
+                  <TrackProgressCard />
+                </Stack>
               </Grid>
             </Grid>
           </Paper>
