@@ -1,13 +1,20 @@
 import { IconFitnessCenter } from "@/assets/icons";
 import { Card } from "@/components/Card";
-import theme from "@/theme";
-import { Avatar, CardHeader, Rating, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  CardHeader,
+  Rating,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 
 interface CardProps {
   value: number;
   delay?: number;
 }
 export const PersonalCoachCard = ({ value, delay }: CardProps) => {
+  const theme = useTheme();
   return (
     <Card title="Get yourself a personal coach" variant="primary" delay={delay}>
       <Stack spacing={2}>

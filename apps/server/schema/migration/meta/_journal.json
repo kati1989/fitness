@@ -5,8 +5,22 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1733608618499,
-      "tag": "0000_condemned_electro",
+      "when": 1735287969886,
+      "tag": "0000_great_paladin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1735288487497,
+      "tag": "0001_huge_echo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1735288660678,
+      "tag": "0002_nosy_praxagora",
       "breakpoints": true
     }
   ]

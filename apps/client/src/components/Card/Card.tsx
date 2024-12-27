@@ -1,5 +1,4 @@
-import theme from "@/theme";
-import { Paper, Stack, Typography } from "@mui/material";
+import { Paper, Stack, Typography, useTheme } from "@mui/material";
 import "./Card.css";
 
 interface CardProps {
@@ -9,6 +8,7 @@ interface CardProps {
   delay?: number;
 }
 export const Card = ({ title, children, variant, delay }: CardProps) => {
+  const theme = useTheme();
   let { color, backgroundColor } = {
     color: theme.palette.text.primary,
     backgroundColor: theme.palette.background.default,

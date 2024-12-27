@@ -1,14 +1,13 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import { Button, Paper, Stack, Typography } from "@mui/material";
-import theme from "@/theme";
 import { PersonalCoachCard } from "@/pages/Home/components/PersonalCoachCard";
 import { TrackProgressCard } from "@/pages/Home/components/TrackProgressCard";
 import { grey } from "@mui/material/colors";
-import { alpha } from "@mui/material/styles";
+import { alpha, useTheme } from "@mui/material/styles";
 
 export const Home = () => {
-  // `radial-gradient(farthest-corner circle at 0% 0%, var(--muidocs-palette-grey-50) 0%, var(--muidocs-palette-primary-50) 100%)`;
+  const theme = useTheme();
   const color = grey[50];
   const transparentPrimary = alpha(theme.palette.primary.light, 0.1);
 

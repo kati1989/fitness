@@ -1,9 +1,9 @@
 import { AppRouter } from "@/app-router";
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "@/theme";
+import { ThemeProvider, CssBaseline, useTheme } from "@mui/material";
 import { ErrorProvider } from "./contexts/ErrorContext";
 
 function App() {
+  const theme = useTheme();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -1,0 +1,1 @@
+ALTER TABLE `gym` MODIFY COLUMN `location` varchar(255);

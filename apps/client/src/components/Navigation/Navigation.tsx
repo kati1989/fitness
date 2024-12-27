@@ -3,8 +3,8 @@ import { Stack, Typography, useTheme } from "@mui/material";
 import { navigationStyles } from "./Navigation.styles";
 
 export const Navigation = () => {
-  const theme = useTheme(); // Access the theme
-  const styles = navigationStyles(theme); // Generate styles based on the theme
+  const theme = useTheme();
+  const styles = navigationStyles(theme);
 
   return (
     <Stack sx={styles.stack}>

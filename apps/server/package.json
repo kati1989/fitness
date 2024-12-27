@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
     "build": "tsc",
-    "start": "tsc && node ./dist/server.js"
+    "start": "tsc && node ./dist/server.js",
+    "generate-db": "pnpm drizzle-kit generate",
+    "migrate-db": "pnpm drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",

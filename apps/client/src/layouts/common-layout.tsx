@@ -6,17 +6,27 @@ import { Outlet } from "react-router-dom";
 
 interface CommonLayoutProps {
   showFooter?: boolean;
+  paddingTop?: boolean;
+  fullScreen?: boolean;
 }
 
-export const CommonLayout = ({ showFooter }: CommonLayoutProps) => {
+export const CommonLayout = ({
+  showFooter,
+  paddingTop,
+  fullScreen,
+}: CommonLayoutProps) => {
   return (
     <>
       <Header>
         <Navigation />
       </Header>
-      <Container maxWidth="md" sx={{ pb: 3 }}>
+      {fullScreen ? (
         <Outlet />
-      </Container>
+      ) : (
+        <Container maxWidth="lg" sx={{ pb: 3, pt: paddingTop ? 3 : 0 }}>
+          <Outlet />
+        </Container>
+      )}
       {showFooter && <Footer color="primary" />}{" "}
     </>
   );

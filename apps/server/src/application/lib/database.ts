@@ -1,7 +1,7 @@
 import type { Logger as drizzleLogger } from "drizzle-orm/logger";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import type { userSchema } from "../../../schema/schema";
+import type { gymSchema, userSchema } from "../../../schema/schema";
 import { config } from "dotenv";
 config();
 
@@ -22,6 +22,9 @@ export interface DatabaseError {
 
 export type User = typeof userSchema.$inferSelect;
 export type NewUser = typeof userSchema.$inferInsert;
+
+export type Gym = typeof gymSchema.$inferSelect;
+export type NewGym = typeof gymSchema.$inferInsert;
 
 // Custom logger implementation
 class DBLogger implements drizzleLogger {

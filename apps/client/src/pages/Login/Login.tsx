@@ -1,5 +1,4 @@
 import { useLogin } from "@/services/useAuth";
-import theme from "@/theme";
 import {
   Alert,
   Button,
@@ -8,11 +7,13 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export const Login = () => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

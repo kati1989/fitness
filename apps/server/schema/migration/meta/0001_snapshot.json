@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "df4c3231-c73a-41b5-b25e-6b8acdf007b4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e591b702-97c2-40ba-837c-c08a4d5f0c67",
+  "prevId": "df4c3231-c73a-41b5-b25e-6b8acdf007b4",
   "tables": {
     "gym": {
       "name": "gym",
@@ -25,7 +25,7 @@
           "name": "location",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "primary_phone_contact": {

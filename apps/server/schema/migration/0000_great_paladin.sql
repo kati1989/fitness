@@ -1,3 +1,15 @@
+CREATE TABLE `gym` (
+	`id` serial AUTO_INCREMENT NOT NULL,
+	`name` varchar(100) NOT NULL,
+	`location` varchar(255) NOT NULL,
+	`primary_phone_contact` varchar(15) NOT NULL,
+	`primary_email_contact` varchar(40) NOT NULL,
+	`description` text,
+	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT `gym_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `user` (
 	`id` serial AUTO_INCREMENT NOT NULL,
 	`firstname` varchar(50) NOT NULL,

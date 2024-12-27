@@ -1,10 +1,10 @@
-import theme from "@/theme";
-import { Box, Container } from "@mui/material";
+import { Box, Container, useTheme } from "@mui/material";
 
 interface FooterProps {
   color: "primary" | "secondary";
 }
 export const Footer = ({ color }: FooterProps) => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
