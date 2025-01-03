@@ -14,9 +14,12 @@ export const Header: FC<HeaderProps> = ({ children }) => {
         borderColor: theme.palette.divider,
         backgroundColor: "rgba(250, 250, 250, 0.2)",
         backdropFilter: "blur(8px)",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <header>{children}</header>
       </Container>
     </Box>

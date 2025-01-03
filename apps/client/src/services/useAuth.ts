@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 import client from "./api-client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface RegisterRequest {
   firstname: string;
@@ -52,6 +54,9 @@ export const useRegister = () => {
 
         const response: RegisterResponse = await result.json();
         setData(response);
+        if (response.errors.length > 0) {
+          setIsError(true);
+        }
       } catch {
         setIsError(true);
       } finally {
@@ -68,25 +73,39 @@ export const useLogin = () => {
   const [data, setData] = useState<LoginResponse | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  const sendRequest = useCallback(async ({ email, password }: LoginRequest) => {
-    setIsLoading(true);
-    setIsError(false);
+  const sendRequest = useCallback(
+    async ({ email, password }: LoginRequest) => {
+      setIsLoading(true);
+      setIsError(false);
 
-    try {
-      const result = await client.auth.login.$post({
-        json: { email, password },
-      });
+      try {
+        const result = await client.auth.login.$post({
+          json: { email, password },
+        });
 
-      const response: LoginResponse = await result.json();
-      setData(response);
-    } catch (error) {
-      console.error(error); // Log the error for debugging
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        const response: LoginResponse = await result.json();
+        setData(response);
+
+        if (response.data?.token) {
+          login(response.data?.token);
+          navigate("/gyms");
+        }
+
+        if (response.errors.length > 0) {
+          setIsError(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [login, navigate]
+  );
 
   return { data, isError, isLoading, sendRequest };
 };

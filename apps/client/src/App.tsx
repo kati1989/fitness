@@ -1,15 +1,19 @@
 import { AppRouter } from "@/app-router";
-import { ThemeProvider, CssBaseline, useTheme } from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { theme } from "./theme";
 import { ErrorProvider } from "./contexts/ErrorContext";
+import "leaflet/dist/leaflet.css";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
-  const theme = useTheme();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ErrorProvider>
-        <AppRouter />
-      </ErrorProvider>
+      <AuthProvider>
+        <ErrorProvider>
+          <AppRouter />
+        </ErrorProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

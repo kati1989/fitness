@@ -23,6 +23,7 @@ export const Gyms = () => {
         {data?.map((gym) => (
           <Grid size={{ lg: 4, md: 6, sm: 12 }}>
             <GymCard
+              gymId={gym.id.toString()}
               key={gym.id}
               image={
                 gym.image ||

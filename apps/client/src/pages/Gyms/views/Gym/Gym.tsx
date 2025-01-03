@@ -1,43 +1,52 @@
 import { useGym } from "@/services/useGym";
-import { Box, Container, Rating, Typography, useTheme } from "@mui/material";
-import { useState, useEffect } from "react";
+import {
+  Box,
+  Container,
+  Grid2 as Grid,
+  Rating,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
+import { GymMap } from "./components/GymMap";
+import { SubscriptionCard } from "@/pages/Gyms/views/Gym/components/SubscriptionCard";
 
 // Mock data for gym details
-const mockGymData = {
-  id: 1,
-  name: "Elite Fitness Gym",
-  description:
-    "Achieve your fitness goals with state-of-the-art equipment, expert trainers, and a welcoming community.",
-  location: "Bucuresti, Strada Aviatorilor, Nr 2",
-  primary_phone_contact: "+40 747 033 345",
-  primary_email_contact: "elitefitness@gyms.ro",
-  image:
-    "https://theironoffice.com/cdn/shop/files/Gym_12.23-19.jpg?v=1701994187&width=3840",
-  comments: [
-    "Great gym with excellent facilities.",
-    "The trainers are very professional and helpful.",
-    "Amazing environment for fitness enthusiasts!",
-  ],
-  rank: 4.5,
-  subscriptions: [
-    {
-      plan: "Basic Plan",
-      price: "$30/month",
-      duration: "1 month",
-    },
-    {
-      plan: "Premium Plan",
-      price: "$50/month",
-      duration: "1 month",
-    },
-    {
-      plan: "Annual Plan",
-      price: "$500/year",
-      duration: "12 months",
-    },
-  ],
-};
+// const mockGymData = {
+//   id: 1,
+//   name: "Elite Fitness Gym",
+//   description:
+//     "Achieve your fitness goals with state-of-the-art equipment, expert trainers, and a welcoming community.",
+//   location: "Bucuresti, Strada Aviatorilor, Nr 2",
+//   primary_phone_contact: "+40 747 033 345",
+//   primary_email_contact: "elitefitness@gyms.ro",
+//   image:
+//     "https://theironoffice.com/cdn/shop/files/Gym_12.23-19.jpg?v=1701994187&width=3840",
+//   comments: [
+//     "Great gym with excellent facilities.",
+//     "The trainers are very professional and helpful.",
+//     "Amazing environment for fitness enthusiasts!",
+//   ],
+//   rank: 4.5,
+//   subscriptions: [
+//     {
+//       plan: "Basic Plan",
+//       price: "$30/month",
+//       duration: "1 month",
+//     },
+//     {
+//       plan: "Premium Plan",
+//       price: "$50/month",
+//       duration: "1 month",
+//     },
+//     {
+//       plan: "Annual Plan",
+//       price: "$500/year",
+//       duration: "12 months",
+//     },
+//   ],
+// };
 
 export const Gym = () => {
   const { id } = useParams();
@@ -118,9 +127,50 @@ export const Gym = () => {
           />
         </Box>
       </Box>
-      <Container maxWidth={"lg"} sx={{ py: 3, mt: "600px" }}>
-        <Typography variant="body1">{data?.description}</Typography>
-      </Container>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          py: 3,
+          mt: "600px",
+        }}
+      >
+        <Container maxWidth={"lg"}>
+          <Stack gap={4}>
+            <Stack gap={2}>
+              <Stack textAlign={"center"} gap={1}>
+                <Typography variant="body1" fontWeight={"bold"} color="primary">
+                  Pricing
+                </Typography>
+                <Typography variant={"h4"} fontWeight={"bold"}>
+                  Choose the perfect plan to match your{" "}
+                  <span style={{ color: theme.palette.primary.main }}>
+                    fitness goals!
+                  </span>
+                </Typography>
+                <Typography variant={"body1"}>{data?.description}</Typography>
+              </Stack>
+              <Grid
+                container
+                sx={{ display: "flex", alignContent: "center", mt: 10 }}
+                spacing={2}
+              >
+                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
+                  <SubscriptionCard />
+                </Grid>
+                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
+                  <SubscriptionCard />
+                </Grid>
+                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
+                  <SubscriptionCard />
+                </Grid>
+              </Grid>
+            </Stack>
+          </Stack>
+        </Container>
+        <Box sx={{ height: "400px" }}>
+          <GymMap lat={0} lng={0} name={""} />
+        </Box>
+      </Box>
     </>
   );
 };

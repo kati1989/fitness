@@ -9,7 +9,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export const Login = () => {
@@ -18,26 +18,6 @@ export const Login = () => {
   const [password, setPassword] = useState("");
 
   const { data, isError, isLoading, sendRequest } = useLogin();
-
-  useEffect(() => {
-    f();
-  }, []);
-
-  const f = async () => {
-    const result = await fetch("http://localhost:3000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "user@example.com",
-        password: "securepassword123",
-      }),
-    });
-
-    const data = await result.json();
-    console.log(data);
-  };
 
   const handleLogin = () => {
     if (!email || !password) {

@@ -7,6 +7,7 @@ export const navigationStyles = (theme: Theme) => ({
     gap: theme.spacing(5),
     py: theme.spacing(3),
     justifyContent: "flex-end",
+    alignItems: "center",
   },
   navLink: {
     textDecoration: "none",

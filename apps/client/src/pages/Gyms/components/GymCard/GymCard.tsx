@@ -5,22 +5,28 @@ import {
   Typography,
   Button,
   Box,
+  Rating,
+  useTheme,
 } from "@mui/material";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import { useNavigate } from "react-router-dom";
 
 interface GymCardProps {
   image?: string;
   title: string;
   description: string;
+  gymId: string;
 }
-export const GymCard = ({ image, title, description }: GymCardProps) => {
+export const GymCard = ({ image, title, description, gymId }: GymCardProps) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const goToGym = () => {
+    navigate(`${gymId}`);
+  };
+
   return (
-    <Card
-      sx={{
-        boxShadow: 3,
-        overflow: "hidden",
-      }}
-    >
+    <Card>
       <CardMedia component="img" height="180" image={image} alt="Gym Image" />
       <CardContent>
         <Box display="flex" alignItems="center" gap={1}>
@@ -44,12 +50,25 @@ export const GymCard = ({ image, title, description }: GymCardProps) => {
         alignItems="center"
         p={2}
       >
-        <Button size="small" variant="contained" color="primary">
-          Join Now
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={goToGym}
+        >
+          details
         </Button>
-        <Typography variant="subtitle1" color="primary" fontWeight="bold">
-          $50/month
-        </Typography>
+        <Rating
+          name="size-small"
+          defaultValue={4.5}
+          precision={0.5}
+          // sx={{
+          //   color: theme.palette.primary.main,
+          //   "& .MuiRating-iconEmpty": {
+          //     color: (theme) => theme.palette.primary.main,
+          //   },
+          // }}
+        />
       </Box>
     </Card>
   );
