@@ -6,6 +6,30 @@ import { Login, Register } from "../dto/auth";
 
 const userRepository = new UserRepository();
 
+export const changePasswordHandler = async (c: Context) => {
+  const { email, oldPassword, newPassword } = await c.req.json();
+
+  // Validate inputs
+  if (!email || !oldPassword || !newPassword) {
+    return c.json({ success: false, errors: ["Invalid input"] }, 400);
+  }
+
+  try {
+    const user = await userRepository.findByEmail(email);
+
+    if (!user || user[0].password !== oldPassword) {
+      return c.json({ success: false, errors: ["Invalid credentials"] }, 401);
+    }
+
+    // Update the password
+    await userRepository.update(user[0].id, { password: newPassword });
+    return c.json({ success: true });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return c.json({ success: false, errors: ["Internal server error"] }, 500);
+  }
+};
+
 export const loginHandler = async (c: Context) => {
   const { email, password } = await c.req.json();
 

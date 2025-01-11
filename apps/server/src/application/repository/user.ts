@@ -18,4 +18,13 @@ export class UserRepository {
       .where(eq(userSchema.email, email))
       .execute();
   }
+
+  public async update(id: number, updatedUser: Partial<NewUser>) {
+    return db
+      .update(userSchema)
+      .set(updatedUser)
+      .where(eq(userSchema.id, id))
+      .execute();
+  }
+  
 }
