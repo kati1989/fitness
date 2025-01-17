@@ -62,7 +62,7 @@ export const Login = () => {
         {isLoading ? "Logging in..." : "Log in"}
       </Button>
       <Stack direction={"row"} justifyContent={"space-between"}>
-        <NavLink to={"/reset-password"}>
+        <NavLink to="http://localhost:3000/api/page/change-password">
           <Typography variant="body2" color={"primary.main"}>
             Forgot password
           </Typography>
