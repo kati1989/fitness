@@ -1,9 +1,10 @@
 import { eq } from "drizzle-orm";
-import { userSchema } from "../../../schema/schema";
-import { db, type NewUser } from "../lib/database";
+import { db, userSchema, type NewUser } from "../database/database";
 
 export class UserRepository {
   public async create(user: NewUser) {
+    console.log(userSchema);
+
     return db.insert(userSchema).values(user).execute();
   }
 
@@ -26,5 +27,4 @@ export class UserRepository {
       .where(eq(userSchema.id, id))
       .execute();
   }
-  
 }

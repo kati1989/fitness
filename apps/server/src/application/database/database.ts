@@ -1,8 +1,6 @@
 import type { Logger as drizzleLogger } from "drizzle-orm/logger";
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
-import type { gymSchema, userSchema } from "../../../schema/schema";
 import { config } from "dotenv";
+import { DatabaseClientFactory } from "./DatabaseClientFactory";
 config();
 
 const DB_ERRORS = {
@@ -20,13 +18,20 @@ export interface DatabaseError {
   sqlMessage: string;
 }
 
+let client;
+const databaseType = process.env.DATABASE_TYPE as string;
+
+const { client: dbClient, schema: dbSchema } =
+  await DatabaseClientFactory.create(databaseType);
+
+client = dbClient;
+
 export type User = typeof userSchema.$inferSelect;
 export type NewUser = typeof userSchema.$inferInsert;
 
 export type Gym = typeof gymSchema.$inferSelect;
 export type NewGym = typeof gymSchema.$inferInsert;
 
-// Custom logger implementation
 class DBLogger implements drizzleLogger {
   logQuery(query: string, params: unknown[]): void {
     console.log(`SQL Query: ${query}`);
@@ -34,12 +39,11 @@ class DBLogger implements drizzleLogger {
   }
 }
 
-const connection = await mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT!),
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-});
-const db = drizzle({ client: connection });
+if (!databaseType) {
+  throw new Error("DATABASE_TYPE is not set in environment variables.");
+}
 
-export { DB_ERRORS, connection, db };
+export const { connection, db, dbCredentials } = client;
+export const { userSchema, gymSchema } = dbSchema;
+
+export { DB_ERRORS };

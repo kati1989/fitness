@@ -6,6 +6,7 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
+import { DatabaseSchema } from "@server/database/DatabaseSchema";
 
 export const userSchema = mysqlTable("user", {
   id: serial("id").primaryKey(),
@@ -37,3 +38,7 @@ export const gymSchema = mysqlTable("gym", {
     .notNull(),
   updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
+export default class MySQLSchema implements DatabaseSchema {
+  gymSchema = gymSchema;
+  userSchema = userSchema;
+}

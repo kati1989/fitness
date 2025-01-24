@@ -7,26 +7,42 @@ import { Login, Register } from "../dto/auth";
 const userRepository = new UserRepository();
 
 export const changePasswordHandler = async (c: Context) => {
-  const { email, oldPassword, newPassword } = await c.req.json();
+  const formData = await c.req.parseBody();
+  const { email, oldPassword, newPassword } = formData;
 
-  // Validate inputs
   if (!email || !oldPassword || !newPassword) {
-    return c.json({ success: false, errors: ["Invalid input"] }, 400);
+    return c.redirect(
+      `/page/change-password?errors=${encodeURIComponent(
+        JSON.stringify(["Invalid input"])
+      )}`,
+      303
+    );
   }
 
   try {
-    const user = await userRepository.findByEmail(email);
+    const user = await userRepository.findByEmail(email as string);
 
     if (!user || user[0].password !== oldPassword) {
-      return c.json({ success: false, errors: ["Invalid credentials"] }, 401);
+      return c.redirect(
+        `/page/change-password?errors=${encodeURIComponent(
+          JSON.stringify(["Invalid credentials"])
+        )}`,
+        303
+      );
     }
 
-    // Update the password
-    await userRepository.update(user[0].id, { password: newPassword });
-    return c.json({ success: true });
+    await userRepository.update(user[0].id, {
+      password: newPassword as string,
+    });
+    return c.redirect(`/page/change-password?success=true`, 303);
   } catch (error) {
     console.error("Error changing password:", error);
-    return c.json({ success: false, errors: ["Internal server error"] }, 500);
+    return c.redirect(
+      `/page/change-password?errors=${encodeURIComponent(
+        JSON.stringify(["Invalid credentials"])
+      )}`,
+      303
+    );
   }
 };
 
@@ -87,6 +103,7 @@ export const registerHandler = async (c: Context) => {
     return c.json(response, 500);
   } catch (error) {
     response.errors.push((error as Error).message);
+    console.log(error);
     return c.json(response, 500);
   }
 };

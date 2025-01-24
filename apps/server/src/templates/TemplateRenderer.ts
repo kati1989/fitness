@@ -1,3 +1,4 @@
+// TemplateRenderer.ts
 export interface TemplateRenderer {
-    render(templatePath: string, data: object): string;
-  }
+  render(templatePath: string, data: object): string;
+}

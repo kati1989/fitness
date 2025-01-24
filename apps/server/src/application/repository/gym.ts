@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
-import { gymSchema } from "../../../schema/schema";
-import { db, type NewGym } from "../lib/database";
+import { db, type NewGym, gymSchema } from "../database/database";
 
 export class GymRepository {
   public async create(gym: NewGym) {
