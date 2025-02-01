@@ -11,7 +11,7 @@ export default class SQLiteClient implements DatabaseClient {
   db: any;
 
   async init() {
-    this.connection = { source: process.env.DATABASE_URL };
+    this.connection = { source: process.env.SQLITE_FILE_PATH };
     this.db = drizzle({ client: new Database("sqlite.db") });
   }
 }

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 
-const supportedDialects = ["mysql", "sqlite"] as const;
+const supportedDialects = ["mysql", "sqlite", "postgresql"] as const;
 type SupportedDialect = (typeof supportedDialects)[number];
 
 const databaseType = process.env.DATABASE_TYPE as SupportedDialect;
@@ -23,8 +23,18 @@ const config = {
       host: process.env.DB_HOST!,
       port: parseInt(process.env.DB_PORT!),
       user: process.env.DB_USER!,
-      password: process.env.DB_PASS!,
       database: process.env.DB_NAME!,
+    },
+  },
+  postgresql: {
+    dialect: "postgresql" as const,
+    dbCredentials: {
+      host: process.env.POSTGRESQL_DB_HOST!,
+      port: parseInt(process.env.POSTGRESQL_DB_PORT!),
+      user: process.env.POSTGRESQL_DB_USER!,
+      password: process.env.POSTGRESQL_DB_PASS!,
+      database: process.env.DB_NAME!,
+      ssl: false,
     },
   },
 };
