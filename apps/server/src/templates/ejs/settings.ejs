@@ -1,0 +1,27 @@
+<%- include( header ) %>
+
+    <form method="POST" action="/settings">
+      <h1><%= title %></h1>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" value="<%= user.email %>" required />
+
+      <label for="newPassword">New Password</label>
+      <input type="password" name="newPassword" id="newPassword" required />
+
+      <button type="submit">Save Changes</button>
+
+      <% if (errors.length > 0) { %>
+        <ul class="error">
+          <% errors.forEach(error => { %>
+            <li><%= error %></li>
+          <% }); %>
+        </ul>
+      <% } %>
+
+      <% if (success) { %>
+        <p class="success"><%= success %></p>
+      <% } %>
+    </form>
+  </body>
+</html>
