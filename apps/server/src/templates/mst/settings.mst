@@ -1,0 +1,25 @@
+{{> header}}
+
+<form method="POST" action="/settings">
+  <h1>{{title}}</h1>
+
+  <label for="email">Email</label>
+  <input type="email" name="email" id="email" value="{{user.email}}" required />
+
+  <label for="newPassword">New Password</label>
+  <input type="password" name="newPassword" id="newPassword" required />
+
+  <button type="submit">Save Changes</button>
+
+  {{#errors.length}}
+    <ul class="error">
+      {{#errors}}
+        <li>{{.}}</li>
+      {{/errors}}
+    </ul>
+  {{/errors.length}}
+
+  {{#success}}
+    <p class="success">{{success}}</p>
+  {{/success}}
+</form>

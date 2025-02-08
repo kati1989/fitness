@@ -8,9 +8,9 @@ const userRepository = new UserRepository();
 
 export const changePasswordHandler = async (c: Context) => {
   const formData = await c.req.parseBody();
-  const { email, oldPassword, newPassword } = formData;
+  const { email, newPassword } = formData;
 
-  if (!email || !oldPassword || !newPassword) {
+  if (!email || !newPassword) {
     return c.redirect(
       `/page/change-password?errors=${encodeURIComponent(
         JSON.stringify(["Invalid input"])
@@ -21,15 +21,6 @@ export const changePasswordHandler = async (c: Context) => {
 
   try {
     const user = await userRepository.findByEmail(email as string);
-
-    if (!user || user[0].password !== oldPassword) {
-      return c.redirect(
-        `/page/change-password?errors=${encodeURIComponent(
-          JSON.stringify(["Invalid credentials"])
-        )}`,
-        303
-      );
-    }
 
     await userRepository.update(user[0].id, {
       password: newPassword as string,

@@ -1,0 +1,20 @@
+include partials/header.pug
+
+form(method="POST" action="/settings")
+  h1= title
+
+  label(for="email") Email
+  input(type="email" name="email" id="email" required value=user.email)
+
+  label(for="newPassword") New Password
+  input(type="password" name="newPassword" id="newPassword" required)
+
+  button(type="submit") Save Changes
+
+  if errors.length
+    ul.error
+      each error in errors
+        li= error
+
+  if success
+    p.success= success
