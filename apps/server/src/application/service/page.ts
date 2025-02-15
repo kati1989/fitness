@@ -1,13 +1,10 @@
 import { Context } from "hono";
 import { getChangePasswordPageData } from "./pages/change-password";
 import { getSettingsPageData } from "./pages/settings";
-import { getCookie } from "hono/cookie";
+import { getCookie, setCookie } from "hono/cookie";
 
 export const changePasswordPageHandler = async (c: Context) => {
   try {
-    const tokenCookie = getCookie(c, "auth-token");
-    // TO-DO
-
     const html = await getChangePasswordPageData(c);
     return c.html(html);
   } catch (err) {
@@ -18,9 +15,6 @@ export const changePasswordPageHandler = async (c: Context) => {
 
 export const settingsPageHandler = async (c: Context) => {
   try {
-    const tokenCookie = await getCookie(c, "auth-token");
-    // TO-DO
-
     const html = await getSettingsPageData(c);
     return c.html(html);
   } catch (err) {

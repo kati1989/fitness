@@ -9,11 +9,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useLogout } from "@/services/useAuth";
-import client from "@/services/api-client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { sendRequest: logout } = useLogout();
+  const { authToken } = useAuth();
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,8 +28,8 @@ export const UserMenu = () => {
   };
 
   const navigateToSettingsPage = async () => {
-    const response = await client.page.settings.$get();
-    // TO-DO
+    const actualLocation = window.location.href;
+    window.location.href = `http://localhost:3000/page/settings?auth-token=${authToken}&back-href=${actualLocation}`;
   };
 
   return (
@@ -85,17 +86,12 @@ export const UserMenu = () => {
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        {/* <NavLink
-          to="http://localhost:3000/page/settings"
-          style={{ textDecoration: "none", color: "inherit" }}
-        > */}
         <MenuItem onClick={navigateToSettingsPage}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        {/* </NavLink> */}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

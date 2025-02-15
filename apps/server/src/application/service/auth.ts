@@ -1,9 +1,9 @@
 import { Context } from "hono";
 import { CommonResponse } from "../dto/commonResponse";
-import { deleteCookie, setCookie } from "hono/cookie";
 import { UserRepository } from "../repository/user";
 import { generateJWT } from "../utils/jwt";
 import { Login, Register } from "../dto/auth";
+import { Constants } from "@server/utils/constants";
 
 const userRepository = new UserRepository();
 
@@ -38,6 +38,63 @@ export const changePasswordHandler = async (c: Context) => {
   }
 };
 
+export const changeSettingsHandler = async (c: Context) => {
+  const formData = await c.req.parseBody();
+  const { email, firstname, lastname, newPassword, authToken, backHref } =
+    formData;
+  const url = `/page/settings?${Constants.queryParams.page.settings.BACK_HREF}=${backHref}&${Constants.queryParams.page.settings.AUTH_TOKEN}=${authToken}`;
+
+  if (!authToken) {
+    return c.redirect(`${Constants.env.HOME_UI}/log-in`, 303);
+  }
+
+  if (!firstname && !lastname && !newPassword) {
+    return c.redirect(
+      `${url}&errors=${encodeURIComponent(
+        JSON.stringify(["Update data in order to change fields"])
+      )}`,
+      303
+    );
+  }
+
+  try {
+    const user = await userRepository.findByEmail(email as string);
+
+    if (
+      firstname === user[0].firstname &&
+      lastname === user[0].lastname &&
+      (newPassword === user[0].password || !newPassword)
+    ) {
+      return c.redirect(
+        `${url}&errors=${encodeURIComponent(
+          JSON.stringify(["Update data in order to change fields"])
+        )}`,
+        303
+      );
+    }
+
+    const updateData: any = {
+      firstname: firstname as string,
+      lastname: lastname as string,
+    };
+
+    if (newPassword) {
+      updateData.password = newPassword as string;
+    }
+
+    await userRepository.update(user[0].id, updateData);
+    return c.redirect(`${url}&success=true`, 303);
+  } catch (error) {
+    console.error("Error changing settings:", error);
+    return c.redirect(
+      `/page/settings?errors=${encodeURIComponent(
+        JSON.stringify(["Invalid credentials"])
+      )}&${Constants.queryParams.page.settings.AUTH_TOKEN}=${authToken}`,
+      303
+    );
+  }
+};
+
 export const loginHandler = async (c: Context) => {
   const { email, password } = await c.req.json();
 
@@ -56,11 +113,6 @@ export const loginHandler = async (c: Context) => {
 
     if (user.length && user[0].password === password) {
       const token = await generateJWT({ id: user[0].id, email: user[0].email });
-      await setCookie(c, "auth-token", token, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-      });
 
       response.data = { success: true, token };
       return c.json(response, 200);
@@ -107,7 +159,9 @@ export const registerHandler = async (c: Context) => {
 };
 
 export const logoutHandler = async (c: Context) => {
-  deleteCookie(c, "auth-token");
-
   return c.json({ data: { success: true } }, 200);
+};
+
+export const getAuthenticatedUser = async (c: Context) => {
+  return await userRepository.findByEmail(c.get("user").email);
 };

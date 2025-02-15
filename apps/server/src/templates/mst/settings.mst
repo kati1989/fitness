@@ -1,19 +1,23 @@
 {{> header}}
 
-<form method="POST" action="/settings">
+<form method="POST" action="/auth/change-settings">
   <h1>{{title}}</h1>
 
   <label for="firstname">First Name</label>
-  <input type="text" name="firstname" id="firstname" value="{{user.firstname}}" required />
+  <input type="text" name="firstname" id="firstname" value="{{user.firstname}}"  />
 
   <label for="lastname">Last Name</label>
-  <input type="text" name="lastname" id="lastname" value="{{user.lastname}}" required />
+  <input type="text" name="lastname" id="lastname" value="{{user.lastname}}"  />
 
   <label for="email">Email</label>
-  <input type="email" name="email" id="email" value="{{user.email}}" required />
+  <input type="email" name="email" id="email" value="{{user.email}}" disabled />
+  <input type="hidden" name="email" id="email" value="{{user.email}}" />
 
   <label for="newPassword">New Password</label>
-  <input type="password" name="newPassword" id="newPassword" required />
+  <input type="password" name="newPassword" id="newPassword"  />
+  
+  <input type="hidden" name="authToken" id="authToken" value="{{authToken}}" />
+  <input type="hidden" name="backHref" id="backHref" value="{{backHref}}" />
 
   <button type="submit">Save Changes</button>
 

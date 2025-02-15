@@ -5,12 +5,14 @@ import {
   registerHandler,
   changePasswordHandler,
   logoutHandler,
+  changeSettingsHandler,
 } from "../service/auth";
 
 const auth = new Hono()
   .post("/login", loginHandler)
   .post("/register", registerHandler)
   .post("/logout", logoutHandler)
-  .post("/change-password", changePasswordHandler);
+  .post("/change-password", changePasswordHandler)
+  .post("/change-settings", changeSettingsHandler);
 
 export default auth;

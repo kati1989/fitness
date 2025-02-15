@@ -9,7 +9,15 @@ import pagesRoutes from "./route/page";
 export const createApp = () => {
   const app = new Hono();
 
-  app.use("*", cors()).use("*", logger()).use("*", errorHandler);
+  app
+    .use(
+      cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+      })
+    )
+    .use("*", logger())
+    .use("*", errorHandler);
 
   const routes = app
     .route("/auth", authRoutes)
