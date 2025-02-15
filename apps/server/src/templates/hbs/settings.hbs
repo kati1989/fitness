@@ -3,6 +3,12 @@
 <form method="POST" action="/settings">
   <h1>{{title}}</h1>
 
+  <label for="firstname">First Name</label>
+  <input type="text" name="firstname" id="firstname" value="{{user.firstname}}" required />
+
+  <label for="lastname">Last Name</label>
+  <input type="text" name="lastname" id="lastname" value="{{user.lastname}}" required />
+
   <label for="email">Email</label>
   <input type="email" name="email" id="email" value="{{user.email}}" required />
 

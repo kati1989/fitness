@@ -32,6 +32,12 @@ interface LoginResponse {
   errors: string[];
 }
 
+interface LogoutResponse {
+  data?: {
+    success: boolean;
+  };
+}
+
 export const useRegister = () => {
   const [data, setData] = useState<RegisterResponse | null>(null);
   const [isError, setIsError] = useState(false);
@@ -106,6 +112,38 @@ export const useLogin = () => {
     },
     [login, navigate]
   );
+
+  return { data, isError, isLoading, sendRequest };
+};
+
+export const useLogout = () => {
+  const [data, setData] = useState<LogoutResponse | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const sendRequest = useCallback(async () => {
+    setIsLoading(true);
+    setIsError(false);
+
+    try {
+      const result = await client.auth.logout.$post();
+
+      const response: LogoutResponse = await result.json();
+      setData(response);
+
+      if (response.data?.success) {
+        logout();
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [logout, navigate]);
 
   return { data, isError, isLoading, sendRequest };
 };

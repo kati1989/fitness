@@ -4,7 +4,7 @@ import { logger } from "hono/logger";
 import authRoutes from "./route/auth";
 import { errorHandler } from "./middleware/errorHandler";
 import gymRoutes from "./route/gym";
-import pagesRoutes from "./route/pages";
+import pagesRoutes from "./route/page";
 
 export const createApp = () => {
   const app = new Hono();

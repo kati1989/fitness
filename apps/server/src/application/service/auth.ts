@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { CommonResponse } from "../dto/commonResponse";
+import { deleteCookie, setCookie } from "hono/cookie";
 import { UserRepository } from "../repository/user";
 import { generateJWT } from "../utils/jwt";
 import { Login, Register } from "../dto/auth";
@@ -55,6 +56,12 @@ export const loginHandler = async (c: Context) => {
 
     if (user.length && user[0].password === password) {
       const token = await generateJWT({ id: user[0].id, email: user[0].email });
+      await setCookie(c, "auth-token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+      });
+
       response.data = { success: true, token };
       return c.json(response, 200);
     }
@@ -97,4 +104,10 @@ export const registerHandler = async (c: Context) => {
     console.log(error);
     return c.json(response, 500);
   }
+};
+
+export const logoutHandler = async (c: Context) => {
+  deleteCookie(c, "auth-token");
+
+  return c.json({ data: { success: true } }, 200);
 };

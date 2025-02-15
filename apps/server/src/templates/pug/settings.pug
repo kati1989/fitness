@@ -3,6 +3,12 @@ include partials/header.pug
 form(method="POST" action="/settings")
   h1= title
 
+  label(for="firstname") First Name
+  input(type="text" name="firstname" id="firstname" required value=user.firstname)
+
+  label(for="lastname") Last Name
+  input(type="text" name="lastname" id="lastname" required value=user.lastname)
+
   label(for="email") Email
   input(type="email" name="email" id="email" required value=user.email)
 
