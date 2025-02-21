@@ -4,7 +4,7 @@ import { sqliteTable as table } from "drizzle-orm/sqlite-core";
 import * as t from "drizzle-orm/sqlite-core";
 
 export const userSchema = table("user", {
-  id: t.int("id").primaryKey({ autoIncrement: true }),
+  id: t.text("id").primaryKey(),
   firstname: t.text("firstname").notNull(),
   lastname: t.text("lastname").notNull(),
   email: t.text("email").notNull().unique(),
@@ -18,7 +18,7 @@ export const userSchema = table("user", {
 });
 
 export const gymSchema = table("gym", {
-  id: t.int("id").primaryKey({ autoIncrement: true }),
+  id: t.text("id").primaryKey(),
   name: t.text("name").notNull(),
   location: t.text("location").notNull(),
   image: t.text("image"),
@@ -33,6 +33,7 @@ export const gymSchema = table("gym", {
 });
 
 export default class SQLiteSchema implements DatabaseSchema {
+  userInfoSchema = null;
   userSchema = userSchema;
   gymSchema = gymSchema;
 }

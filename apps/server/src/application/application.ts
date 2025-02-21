@@ -5,6 +5,7 @@ import authRoutes from "./route/auth";
 import { errorHandler } from "./middleware/errorHandler";
 import gymRoutes from "./route/gym";
 import pagesRoutes from "./route/page";
+import userRoutes from "./route/user";
 
 export const createApp = () => {
   const app = new Hono();
@@ -21,6 +22,7 @@ export const createApp = () => {
 
   const routes = app
     .route("/auth", authRoutes)
+    .route("/user", userRoutes)
     .route("/gym", gymRoutes)
     .route("/page", pagesRoutes);
 

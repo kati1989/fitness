@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1735287969886,
-      "tag": "0000_great_paladin",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1735288487497,
-      "tag": "0001_huge_echo",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1735288660678,
-      "tag": "0002_nosy_praxagora",
+      "when": 1740168429042,
+      "tag": "0000_far_ultimatum",
       "breakpoints": true
     }
   ]

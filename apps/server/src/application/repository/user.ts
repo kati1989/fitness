@@ -3,12 +3,14 @@ import { db, userSchema, type NewUser } from "../database/database";
 
 export class UserRepository {
   public async create(user: NewUser) {
-    console.log(userSchema);
-
     return db.insert(userSchema).values(user).execute();
   }
 
-  public async find(id: number) {
+  public async findAll() {
+    return db.select().from(userSchema).execute();
+  }
+
+  public async find(id: string) {
     return db.select().from(userSchema).where(eq(userSchema.id, id)).execute();
   }
 
@@ -20,7 +22,7 @@ export class UserRepository {
       .execute();
   }
 
-  public async update(id: number, updatedUser: Partial<NewUser>) {
+  public async update(id: string, updatedUser: Partial<NewUser>) {
     return db
       .update(userSchema)
       .set(updatedUser)

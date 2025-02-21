@@ -2,6 +2,7 @@ import { Context } from "hono";
 import { CommonResponse } from "../dto/commonResponse";
 import { GymRepository } from "../repository/gym";
 import { CreateGymResponse, GetGymResponse, GetGymsResponse } from "../dto/gym";
+import { v4 as uuid } from "uuid";
 
 const gymRepository = new GymRepository();
 
@@ -24,8 +25,11 @@ export const createGymHandler = async (c: Context) => {
     return c.json(response, 400);
   }
 
+  const id = uuid();
+
   try {
     const newGym = {
+      id,
       name,
       location,
       primary_phone_contact,
@@ -73,13 +77,13 @@ export const getAllGymsHandler = async (c: Context) => {
 };
 
 export const getGymHandler = async (c: Context) => {
-  const id = parseInt(c.req.param("id"));
+  const id = c.req.param("id");
   const response: CommonResponse<GetGymResponse> = {
     data: undefined,
     errors: [],
   };
 
-  if (isNaN(id)) {
+  if (!id) {
     response.errors.push("Invalid ID.");
     return c.json(response, 400);
   }
@@ -114,14 +118,14 @@ export const getGymHandler = async (c: Context) => {
 };
 
 export const updateGymHandler = async (c: Context) => {
-  const id = parseInt(c.req.param("id"));
+  const id = c.req.param("id");
   const updates = await c.req.json();
   const response: CommonResponse<CreateGymResponse> = {
     data: undefined,
     errors: [],
   };
 
-  if (isNaN(id)) {
+  if (!id) {
     response.errors.push("Invalid ID.");
     return c.json(response, 400);
   }
@@ -137,13 +141,13 @@ export const updateGymHandler = async (c: Context) => {
 };
 
 export const deleteGymHandler = async (c: Context) => {
-  const id = parseInt(c.req.param("id"));
+  const id = c.req.param("id");
   const response: CommonResponse<CreateGymResponse> = {
     data: undefined,
     errors: [],
   };
 
-  if (isNaN(id)) {
+  if (!id) {
     response.errors.push("Invalid ID.");
     return c.json(response, 400);
   }

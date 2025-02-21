@@ -29,7 +29,6 @@ export const getSettingsPageData = async (c: Context) => {
   const userHandler = await getAuthenticatedUser(c);
 
   const userForPage = mapUserToUserForPage(userHandler[0]);
-  console.log(userForPage, userHandler);
 
   const data = {
     title: "User Settings",

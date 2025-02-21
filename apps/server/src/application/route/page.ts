@@ -3,11 +3,7 @@ import {
   changePasswordPageHandler,
   settingsPageHandler,
 } from "@server/service/page";
-import {
-  authenticateJWT,
-  authenticateJWTWithQuery,
-} from "@server/middleware/authMiddleware";
-import { cors } from "hono/cors";
+import { authenticateJWTWithQuery } from "@server/middleware/authMiddleware";
 
 const pagesRoutes = new Hono()
   .get("/change-password", changePasswordPageHandler)

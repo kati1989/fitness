@@ -4,7 +4,7 @@ export interface CreateGymResponse {
 
 export interface GetGymResponse {
   gym: {
-    id: number;
+    id: string;
     name: string;
     location: string;
     primary_phone_contact: string;

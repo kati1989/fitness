@@ -29,6 +29,9 @@ client = dbClient;
 export type User = typeof userSchema.$inferSelect;
 export type NewUser = typeof userSchema.$inferInsert;
 
+export type UserInfo = typeof userInfoSchema.$inferSelect;
+export type NewUserInfo = typeof userInfoSchema.$inferInsert;
+
 export type Gym = typeof gymSchema.$inferSelect;
 export type NewGym = typeof gymSchema.$inferInsert;
 
@@ -44,6 +47,6 @@ if (!databaseType) {
 }
 
 export const { connection, db, dbCredentials } = client;
-export const { userSchema, gymSchema } = dbSchema;
+export const { userSchema, gymSchema, userInfoSchema } = dbSchema;
 
 export { DB_ERRORS };

@@ -3,7 +3,7 @@ import { DatabaseSchema } from "@server/database/DatabaseSchema";
 import * as t from "drizzle-orm/pg-core";
 
 export const userSchema = pgTable("user", {
-  id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: t.varchar({ length: 255 }).primaryKey(),
   firstname: t.varchar("firstname", { length: 50 }).notNull(),
   lastname: t.varchar("lastname", { length: 50 }).notNull(),
   email: t.varchar("email", { length: 100 }).notNull().unique(),
@@ -14,7 +14,7 @@ export const userSchema = pgTable("user", {
 });
 
 export const gymSchema = pgTable("gym", {
-  id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+  id: t.varchar({ length: 255 }).primaryKey(),
   name: t.varchar("name", { length: 100 }).notNull(),
   location: t.varchar("location", { length: 255 }).notNull(),
   image: t.varchar("image", { length: 255 }),
@@ -34,6 +34,7 @@ export const gymSchema = pgTable("gym", {
 });
 
 export default class PostgreSQLSchema implements DatabaseSchema {
+  userInfoSchema = null;
   gymSchema = gymSchema;
   userSchema = userSchema;
 }

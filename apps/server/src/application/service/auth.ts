@@ -4,6 +4,8 @@ import { UserRepository } from "../repository/user";
 import { generateJWT } from "../utils/jwt";
 import { Login, Register } from "../dto/auth";
 import { Constants } from "@server/utils/constants";
+import { v4 as uuid } from "uuid";
+import { verify } from "hono/jwt";
 
 const userRepository = new UserRepository();
 
@@ -139,7 +141,9 @@ export const registerHandler = async (c: Context) => {
     return c.json(response, 400);
   }
 
-  const newUser = { firstname, lastname, email, password };
+  const id = uuid();
+
+  const newUser = { id, firstname, lastname, email, password };
 
   try {
     const createdUser = await userRepository.create(newUser);
@@ -164,4 +168,16 @@ export const logoutHandler = async (c: Context) => {
 
 export const getAuthenticatedUser = async (c: Context) => {
   return await userRepository.findByEmail(c.get("user").email);
+};
+
+export const getAuthenticatedUserFromToken = async (c: Context) => {
+  const token = c.req.header("Authorization");
+
+  if (!token) {
+    return null;
+  }
+
+  const decodedPayload = await verify(token, Constants.env.JWT_SECRET!);
+
+  return decodedPayload;
 };

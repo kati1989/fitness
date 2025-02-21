@@ -6,7 +6,7 @@ export class GymRepository {
     return db.insert(gymSchema).values(gym).execute();
   }
 
-  public async findById(id: number) {
+  public async findById(id: string) {
     return db.select().from(gymSchema).where(eq(gymSchema.id, id)).execute();
   }
 
@@ -14,7 +14,7 @@ export class GymRepository {
     return db.select().from(gymSchema).execute();
   }
 
-  public async update(id: number, updatedGym: Partial<NewGym>) {
+  public async update(id: string, updatedGym: Partial<NewGym>) {
     return db
       .update(gymSchema)
       .set(updatedGym)
@@ -22,7 +22,7 @@ export class GymRepository {
       .execute();
   }
 
-  public async delete(id: number) {
+  public async delete(id: string) {
     return db.delete(gymSchema).where(eq(gymSchema.id, id)).execute();
   }
 }
