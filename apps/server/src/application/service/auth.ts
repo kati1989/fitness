@@ -6,6 +6,7 @@ import { Login, Register } from "../dto/auth";
 import { Constants } from "@server/utils/constants";
 import { v4 as uuid } from "uuid";
 import { verify } from "hono/jwt";
+import { performUserUpdate } from "./user";
 
 const userRepository = new UserRepository();
 
@@ -42,21 +43,42 @@ export const changePasswordHandler = async (c: Context) => {
 
 export const changeSettingsHandler = async (c: Context) => {
   const formData = await c.req.parseBody();
-  const { email, firstname, lastname, newPassword, authToken, backHref } =
-    formData;
+  const {
+    email,
+    firstname,
+    lastname,
+    newPassword,
+    profilePicture,
+    authToken,
+    backHref,
+  } = formData;
   const url = `/page/settings?${Constants.queryParams.page.settings.BACK_HREF}=${backHref}&${Constants.queryParams.page.settings.AUTH_TOKEN}=${authToken}`;
+  const errors = [];
 
   if (!authToken) {
     return c.redirect(`${Constants.env.HOME_UI}/log-in`, 303);
   }
+  console.log(profilePicture);
 
-  if (!firstname && !lastname && !newPassword) {
+  if (!firstname && !lastname && !newPassword && !profilePicture) {
+    errors.push("Update data in order to change fields 1");
     return c.redirect(
-      `${url}&errors=${encodeURIComponent(
-        JSON.stringify(["Update data in order to change fields"])
-      )}`,
+      `${url}&errors=${encodeURIComponent(JSON.stringify(errors))}`,
       303
     );
+  }
+
+  if (profilePicture === typeof "string" && profilePicture.length > 0) {
+    try {
+      await performUserUpdate(c, { profileImage: profilePicture });
+    } catch (error) {
+      console.error("Error changing profile picture:", error);
+      errors.push("Error changing profile picture");
+      return c.redirect(
+        `${url}&errors=${encodeURIComponent(JSON.stringify(errors))}`,
+        303
+      );
+    }
   }
 
   try {
@@ -67,10 +89,9 @@ export const changeSettingsHandler = async (c: Context) => {
       lastname === user[0].lastname &&
       (newPassword === user[0].password || !newPassword)
     ) {
+      errors.push("Update data in order to change fields 2");
       return c.redirect(
-        `${url}&errors=${encodeURIComponent(
-          JSON.stringify(["Update data in order to change fields"])
-        )}`,
+        `${url}&errors=${encodeURIComponent(JSON.stringify(errors))}`,
         303
       );
     }

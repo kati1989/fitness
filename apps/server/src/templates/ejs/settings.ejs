@@ -19,6 +19,14 @@
       <input type="hidden" name="authToken" id="authToken" value="<%= authToken %>" />
       <input type="hidden" name="backHref" id="backHref" value="<%= backHref %>" />
 
+      <label for="profilePicture">Profile picture</label>
+      <input type="text" name="profilePicture" id="profilePicture" value="<%= user.profilePicture %>" />
+      
+      <% if (user.profilePicture) { %>
+        <label for="email">Profile picture</label>
+        <img src="<%= user.profilePicture %>" alt="Profile Picture" id="profilePicturePreview" style="margin:auto;width:200px;height:200px;border-radius: 100px;object-fit: cover;"/>
+      <% } %>
+
       <button type="submit">Save Changes</button>
 
       <% if (errors.length > 0) { %>

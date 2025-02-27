@@ -8,6 +8,62 @@
       "when": 1740168429042,
       "tag": "0000_far_ultimatum",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1740685919853,
+      "tag": "0001_groovy_marvel_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1740686188990,
+      "tag": "0002_melted_thunderbolts",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1740686233909,
+      "tag": "0003_fixed_gabe_jones",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1740686998192,
+      "tag": "0004_clean_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1740687051353,
+      "tag": "0005_lethal_the_liberteens",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1740690366282,
+      "tag": "0006_dashing_the_professor",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1740690712307,
+      "tag": "0007_noisy_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1740691798174,
+      "tag": "0008_elite_archangel",
+      "breakpoints": true
     }
   ]
 }

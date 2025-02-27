@@ -2,12 +2,19 @@ import { Paper, Stack, Typography, useTheme } from "@mui/material";
 import "./Card.css";
 
 interface CardProps {
-  title: string;
+  title?: string;
   children: JSX.Element;
   variant?: "primary" | "secondary";
   delay?: number;
+  floating?: boolean;
 }
-export const Card = ({ title, children, variant, delay }: CardProps) => {
+export const Card = ({
+  title,
+  children,
+  variant,
+  delay,
+  floating,
+}: CardProps) => {
   const theme = useTheme();
   let { color, backgroundColor } = {
     color: theme.palette.text.primary,
@@ -22,7 +29,7 @@ export const Card = ({ title, children, variant, delay }: CardProps) => {
   return (
     <>
       <Paper
-        className="card-floating"
+        className={floating ? "card-floating" : ""}
         style={{ animationDelay: `${delay}s` }}
         sx={{
           backgroundColor: backgroundColor,

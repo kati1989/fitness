@@ -1,9 +1,9 @@
 import { templatesPaths } from "@server/utils/templates-paths";
 import { TemplateRendererFactory } from "../../../templates/TemplateRendererFactory";
 import { Context } from "Hono";
-import { getAuthenticatedUser } from "../auth";
 import { mapUserToUserForPage } from "@server/utils/user";
 import { Constants } from "@server/utils/constants";
+import { fetchUser } from "../user";
 
 export const getSettingsPageData = async (c: Context) => {
   const backHref = c.req.query(
@@ -26,9 +26,9 @@ export const getSettingsPageData = async (c: Context) => {
       ? "Settings updated successfully!"
       : null;
 
-  const userHandler = await getAuthenticatedUser(c);
+  const userInfo = await fetchUser(c);
 
-  const userForPage = mapUserToUserForPage(userHandler[0]);
+  const userForPage = mapUserToUserForPage(userInfo);
 
   const data = {
     title: "User Settings",

@@ -1,3 +1,4 @@
+import { Membership } from "@/services/useGym";
 import {
   Box,
   Button,
@@ -39,7 +40,10 @@ function a11yProps(index: number) {
   };
 }
 
-export const SubscriptionCard = () => {
+interface SubscriptionTypeProps {
+  membership: Membership;
+}
+export const SubscriptionCard = ({ membership }: SubscriptionTypeProps) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
 
@@ -51,11 +55,9 @@ export const SubscriptionCard = () => {
     <Card sx={{ textAlign: "center", maxWidth: "350px", margin: "auto" }}>
       <Stack sx={{ gap: 2, p: 2 }}>
         <Typography variant="body1" fontWeight={"bold"}>
-          Comunity
+          {membership.type}
         </Typography>
-        <Typography variant="body1">
-          Get started with the industry-standard React UI library, MIT-licensed.
-        </Typography>
+        <Typography variant="body1">{membership.description}</Typography>
         <Stack>
           <Tabs
             value={value}
@@ -68,7 +70,7 @@ export const SubscriptionCard = () => {
               label="Monthly"
               {...a11yProps(0)}
               sx={{
-                textTransform: "none", // Disable uppercase text
+                textTransform: "none",
                 fontWeight: "bold",
                 position: "relative",
                 zIndex: 1,
@@ -91,7 +93,7 @@ export const SubscriptionCard = () => {
               fontWeight={"bold"}
               color={theme.palette.primary.main}
             >
-              $0
+              ${membership.monthly_price}
             </Typography>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
@@ -100,11 +102,11 @@ export const SubscriptionCard = () => {
               fontWeight={"bold"}
               color={theme.palette.primary.main}
             >
-              $12
+              ${membership.yearly_price}
             </Typography>
           </CustomTabPanel>
         </Stack>
-        <Typography variant="body2">Free forever!</Typography>
+        <Typography variant="body2">{membership.short_description}</Typography>
         <Button
           variant="contained"
           sx={{ textTransform: "none", fontWeight: "bold" }}

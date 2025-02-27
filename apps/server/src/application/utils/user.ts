@@ -5,12 +5,14 @@ export interface UserForPage {
   firstname: string;
   lastname: string;
   email: string;
+  profilePicture?: string;
 }
-export const mapUserToUserForPage = (user: User): UserForPage => {
+export const mapUserToUserForPage = (user: UserResponse): UserForPage => {
   return {
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,
+    profilePicture: user.profileImage,
   };
 };
 

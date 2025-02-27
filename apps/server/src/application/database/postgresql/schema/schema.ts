@@ -33,6 +33,19 @@ export const gymSchema = pgTable("gym", {
   updated_at: timestamp("updated_at"),
 });
 
+export const userInfoSchema = pgTable("user_info", {
+  id: t.varchar("id", { length: 255 }).primaryKey(),
+  user_id: t
+    .varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => userSchema.id),
+  role: t.varchar("role", { length: 50 }).notNull(),
+  profile_image: t.varchar("profile_image", { length: 255 }),
+  about: text("about"),
+  created_at: timestamp("created_at").defaultNow().notNull(),
+  updated_at: timestamp("updated_at"),
+});
+
 export default class PostgreSQLSchema implements DatabaseSchema {
   userInfoSchema = null;
   gymSchema = gymSchema;

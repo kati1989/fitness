@@ -1,7 +1,6 @@
 import { Context } from "hono";
 import { getChangePasswordPageData } from "./pages/change-password";
 import { getSettingsPageData } from "./pages/settings";
-import { getCookie, setCookie } from "hono/cookie";
 
 export const changePasswordPageHandler = async (c: Context) => {
   try {

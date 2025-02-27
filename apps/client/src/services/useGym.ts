@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import client from "./api-client";
+import { UserImageAndName } from "./use-user";
+
+export interface Comment {
+  user: UserImageAndName;
+  score: number;
+  comment: string;
+}
 
 interface Gym {
-  id: number;
+  id: string;
   name: string;
   location: string;
   primary_phone_contact: string;
@@ -11,6 +18,17 @@ interface Gym {
   description?: string;
   created_at: string;
   updated_at: string;
+  score?: number | null;
+  memberships?: Membership[];
+  comments?: Comment[];
+}
+
+export interface Membership {
+  type: string;
+  monthly_price: number;
+  yearly_price: string;
+  description: string;
+  short_description: string;
 }
 
 interface GymsResponse {
@@ -70,13 +88,11 @@ export const useGym = (id: string) => {
       setIsError(false);
 
       try {
-        // Correctly using dynamic gym ID in the API request
         const result = await client.gym[":id"].$get({ param: { id: id } });
 
         const response: GymResponse = await result.json();
 
         if (response.data) {
-          // Assuming only one gym is returned for a specific ID
           setData(response.data.gym);
         } else {
           setIsError(true);
@@ -89,7 +105,7 @@ export const useGym = (id: string) => {
     };
 
     fetchGym();
-  }, [id]); // Fetch again if the ID changes
+  }, [id]);
 
   return { data, isError, isLoading };
 };

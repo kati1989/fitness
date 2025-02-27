@@ -10,11 +10,13 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useLogout } from "@/services/useAuth";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserShortInfo } from "@/services/use-user";
 
 export const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { sendRequest: logout } = useLogout();
   const { authToken } = useAuth();
+  const { data: userShortInfo } = useUserShortInfo();
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,7 +44,12 @@ export const UserMenu = () => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          <Avatar
+            sx={{ width: 32, height: 32 }}
+            src={userShortInfo?.profileImage}
+          >
+            {userShortInfo?.fullName[0].toUpperCase()}
+          </Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -83,7 +90,10 @@ export const UserMenu = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
+          <Avatar src={userShortInfo?.profileImage ?? userShortInfo?.fullName}>
+            {userShortInfo?.fullName[0].toUpperCase()}
+          </Avatar>
+          Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={navigateToSettingsPage}>

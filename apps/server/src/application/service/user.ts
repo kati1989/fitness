@@ -85,68 +85,94 @@ export const getShortInfo = async (c: Context) => {
 };
 
 export const updateUser = async (c: Context) => {
-  const { role, profileImage, about } = await c.req.json();
-
   const response: CommonResponse<CreateUserResponse> = {
     data: undefined,
     errors: [],
   };
+
+  try {
+    const { role, profileImage, about } = await c.req.json();
+    await performUserUpdate(c, { role, profileImage, about });
+    response.data = { success: true };
+    return c.json(response, 200);
+  } catch (error) {
+    console.log(error);
+    response.errors.push((error as Error).message);
+    return c.json(response, 500);
+  }
+};
+
+export const performUserUpdate = async (
+  c: Context,
+  {
+    role,
+    profileImage,
+    about,
+  }: { role?: UserRole; profileImage?: string; about?: string }
+): Promise<void> => {
   let user;
   try {
     const authenticatedUser = c.get("user");
     const users = await userRepository.findByEmail(authenticatedUser.email);
     user = users[0];
+    if (!user) throw new Error("User not found.");
   } catch (error) {
     console.log(error);
-    response.errors.push((error as Error).message);
-    return c.json(response, 404);
-  }
-
-  if (!user) {
-    response.errors.push("User not found.");
-    return c.json(response, 404);
+    throw new Error(`Error retrieving user: ${(error as Error).message}`);
   }
 
   let userInfo;
-
   try {
     const usersInfo = await userInfoRepository.findByUserId(user.id);
     userInfo = usersInfo[0];
   } catch (error) {
     console.log(error);
-    response.errors.push((error as Error).message);
+    throw new Error(`Error retrieving user info: ${(error as Error).message}`);
   }
 
   if (!userInfo) {
-    try {
-      const id = uuid();
-      const role: UserRole = "Fitness Enthusiast";
-      await userInfoRepository.create({
-        id,
-        user_id: user.id,
-        role,
-        about: about,
-        profile_image: profileImage,
-      });
-      response.data = { success: true };
-      return c.json(response, 200);
-    } catch (error) {
-      response.errors.push((error as Error).message);
-      return c.json(response, 500);
-    }
+    await createUserInfo(user.id, role!, profileImage!, about!);
+  } else {
+    await updateUserInfo(userInfo.id, role!, profileImage!, about!);
   }
+};
 
+const createUserInfo = async (
+  userId: string,
+  role: UserRole,
+  profileImage: string,
+  about: string
+) => {
   try {
-    await userInfoRepository.update(userInfo.id, {
-      role: role,
-      about: about,
+    const id = uuid();
+    await userInfoRepository.create({
+      id,
+      user_id: userId,
+      role,
+      about,
       profile_image: profileImage,
     });
-    response.data = { success: true };
-    return c.json(response, 200);
   } catch (error) {
-    response.errors.push((error as Error).message);
-    return c.json(response, 500);
+    console.log(error);
+    throw new Error(`Error creating user info: ${(error as Error).message}`);
+  }
+};
+
+const updateUserInfo = async (
+  userInfoId: string,
+  role: UserRole,
+  profileImage: string,
+  about: string
+) => {
+  try {
+    await userInfoRepository.update(userInfoId, {
+      role,
+      about,
+      profile_image: profileImage,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error updating user info: ${(error as Error).message}`);
   }
 };
 
@@ -157,7 +183,7 @@ const getMergedUsers = (users: User[], usersInfo: UserInfo[]) => {
   });
 };
 
-const fetchUser = async (c: Context): Promise<UserResponse> => {
+export const fetchUser = async (c: Context): Promise<UserResponse> => {
   let user;
   try {
     const authenticatedUser = c.get("user");

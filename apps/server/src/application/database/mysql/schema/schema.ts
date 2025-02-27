@@ -1,4 +1,10 @@
-import { mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  int,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 import { DatabaseSchema } from "@server/database/DatabaseSchema";
 
@@ -46,8 +52,58 @@ export const gymSchema = mysqlTable("gym", {
     .notNull(),
   updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const userMembershipSchema = mysqlTable("user_membership", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  user_id: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => userSchema.id),
+  membership_id: varchar("membership_id", { length: 255 })
+    .notNull()
+    .references(() => gymMembershipSchema.id),
+  created_at: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const gymMembershipSchema = mysqlTable("gym_membership", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  gym_id: varchar("gym_id", { length: 255 })
+    .notNull()
+    .references(() => gymSchema.id),
+  type: varchar("type", { length: 50 }).notNull(),
+  monthly_price: int("monthly_price").notNull(),
+  yearly_price: int("yearly_price").notNull(),
+  description: text("description"),
+  short_description: varchar("short_description", { length: 50 }),
+  created_at: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const gymScoreSchema = mysqlTable("gym_score", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  gym_id: varchar("gym_id", { length: 255 })
+    .notNull()
+    .references(() => gymSchema.id),
+  user_id: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => userSchema.id),
+  score: int("score").notNull(),
+  comment: text("comment"),
+  created_at: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
+
 export default class MySQLSchema implements DatabaseSchema {
   userInfoSchema = userInfoSchema;
   gymSchema = gymSchema;
+  gymScoreSchema = gymScoreSchema;
   userSchema = userSchema;
+  userMembershipSchema = userMembershipSchema;
+  gymMembershipSchema = gymMembershipSchema;
 }

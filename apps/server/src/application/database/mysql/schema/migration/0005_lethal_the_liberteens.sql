@@ -1,0 +1,1 @@
+ALTER TABLE `gym_membership` CHANGE COLUMN `subsctiption_type` `subscription_type` VARCHAR(255);

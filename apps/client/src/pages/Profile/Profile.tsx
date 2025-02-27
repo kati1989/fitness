@@ -17,28 +17,97 @@ import {
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import StarIcon from "@mui/icons-material/Star";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useUser } from "@/services/use-user";
 
 export const Profile = () => {
+  const navigate = useNavigate();
+  const { data: userInfo } = useUser();
+
+  const user = {
+    workouts: [
+      {
+        description: "Attended HIIT class at Gold Gym",
+        date: new Date("2021-10-10").toTimeString(),
+      },
+      {
+        description: "Completed 5k Run in 25 minutes",
+        date: new Date("2021-10-10").toTimeString(),
+      },
+      {
+        description: "Completed 50 Workouts",
+      },
+      {
+        description: "Visited 10 Gyms",
+      },
+      {
+        description: "Burned 1000 Calories",
+      },
+    ],
+    activeSubscriptions: [
+      {
+        name: "Gold Gym Membership",
+        gym: {
+          name: "Gold Gym",
+          id: "1ab4S3GSJHs-Jhsg12",
+        },
+        expiryDate: new Date("2025-01-15").toTimeString(),
+        type: "Premium",
+      },
+      {
+        name: "CrossFit Studio Access",
+        gym: {
+          name: "CrossFit Studio",
+          id: "1ab4S3GSJHs-Jhsg12",
+        },
+        expiryDate: new Date("2025-02-10").toTimeString(),
+        type: "Standard",
+      },
+      {
+        name: "Yoga Class Subscription",
+        gym: {
+          name: "Yoga Studio",
+          id: "1ab4S3GSJHs-Jhsg12",
+        },
+        expiryDate: new Date("2025-03-20").toTimeString(),
+        type: "Standard",
+      },
+    ],
+    milestones: ["5k Run", "50 Workouts", "10 Gyms", "1000 Calories Burned"],
+  };
+
+  const getProgress = () => {
+    const totalWorkpits = user.workouts.length;
+    const completedWorkouts = user.workouts.filter(
+      (workout) => workout.date
+    ).length;
+    return (completedWorkouts / totalWorkpits) * 100;
+  };
+
   return (
     <Stack divider={<Divider />} sx={{ gap: 2 }}>
       <Box>
         <CardHeader
-          avatar={<Avatar sx={{ width: 100, height: 100 }} />}
+          avatar={
+            <Avatar
+              sx={{ width: 200, height: 200 }}
+              src={userInfo?.profileImage}
+            />
+          }
           title={
             <Typography variant="h4" fontWeight="bold">
-              Pop Andrei
+              {userInfo?.firstname} {userInfo?.lastname}
             </Typography>
           }
           subheader={
             <Typography variant="body1" color="textSecondary">
-              Fitness Enthusiast | 25 Workouts This Month
+              {userInfo?.role}
             </Typography>
           }
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary">
-            Achieving milestones every day! Passionate about staying healthy and
-            exploring new gyms in the area.
+            {userInfo?.about}
           </Typography>
         </CardContent>
       </Box>
@@ -50,35 +119,28 @@ export const Profile = () => {
           </Typography>
           <Stack>
             <Stack>
-              <Typography>Weekly Goal Progress</Typography>
+              <Typography>Progress</Typography>
               <LinearProgress
                 variant="determinate"
-                value={75}
+                value={getProgress()}
                 sx={{ height: 10, my: 1 }}
               />
-              <Typography variant="caption">75% complete</Typography>
+              <Typography variant="caption">
+                {getProgress()}% complete
+              </Typography>
             </Stack>
             <Stack>
               <Typography>Milestones Achieved</Typography>
               <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                <Chip
-                  icon={<StarIcon />}
-                  label="5k Run"
-                  color="primary"
-                  variant="outlined"
-                />
-                <Chip
-                  icon={<StarIcon />}
-                  label="50 Workouts"
-                  color="secondary"
-                  variant="outlined"
-                />
-                <Chip
-                  icon={<StarIcon />}
-                  label="10 Gyms"
-                  color="success"
-                  variant="outlined"
-                />
+                {user.milestones.map((milestone) => (
+                  <Chip
+                    icon={<StarIcon />}
+                    key={milestone}
+                    label={milestone}
+                    color="primary"
+                    variant="outlined"
+                  />
+                ))}
               </Stack>
             </Stack>
           </Stack>
@@ -93,21 +155,19 @@ export const Profile = () => {
                 Recent Activity
               </Typography>
               <List>
-                <ListItem>
-                  <FitnessCenterIcon sx={{ color: "primary.main", mr: 2 }} />
-                  <ListItemText
-                    primary="Attended HIIT class at Gold Gym"
-                    secondary="2 days ago"
-                  />
-                </ListItem>
-                <Divider />
-                <ListItem>
-                  <FitnessCenterIcon sx={{ color: "secondary.main", mr: 2 }} />
-                  <ListItemText
-                    primary="Completed 5k Run in 25 minutes"
-                    secondary="4 days ago"
-                  />
-                </ListItem>
+                {user.workouts
+                  .filter((workout) => workout.date)
+                  .map((workout) => (
+                    <ListItem key={workout.description} divider>
+                      <FitnessCenterIcon
+                        sx={{ color: "primary.main", mr: 2 }}
+                      />
+                      <ListItemText
+                        primary={workout.description}
+                        secondary={workout.date}
+                      />
+                    </ListItem>
+                  ))}
               </List>
             </CardContent>
           </Box>
@@ -119,29 +179,26 @@ export const Profile = () => {
                 Active Subscriptions
               </Typography>
               <List>
-                <ListItem>
-                  <ListItemText
-                    primary="Gold Gym Membership"
-                    secondary="Expires on: 15 Jan 2025"
-                  />
-                  <Chip
-                    icon={<MonetizationOnIcon />}
-                    label="Premium"
-                    color="warning"
-                  />
-                </ListItem>
-                <Divider />
-                <ListItem>
-                  <ListItemText
-                    primary="CrossFit Studio Access"
-                    secondary="Expires on: 10 Feb 2025"
-                  />
-                  <Chip
-                    icon={<MonetizationOnIcon />}
-                    label="Standard"
-                    color="info"
-                  />
-                </ListItem>
+                {user.activeSubscriptions.map((subscription) => (
+                  <ListItem key={subscription.name} divider>
+                    <NavLink
+                      to={`/gyms/${subscription.gym.id}`}
+                      style={{ color: "#020202" }}
+                    >
+                      <ListItemText
+                        primary={subscription.name}
+                        secondary={`Expires on ${subscription.expiryDate}`}
+                      />
+                    </NavLink>
+                    <Chip
+                      icon={<MonetizationOnIcon />}
+                      label={subscription.type}
+                      color={
+                        subscription.type === "Premium" ? "warning" : "info"
+                      }
+                    />
+                  </ListItem>
+                ))}
               </List>
             </CardContent>
           </Box>
@@ -158,7 +215,11 @@ export const Profile = () => {
         <Typography variant="body1" color="textSecondary">
           Ready to set new goals and track your progress?
         </Typography>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/gyms")}
+        >
           Explore More Gyms
         </Button>
       </Box>

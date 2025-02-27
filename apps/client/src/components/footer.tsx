@@ -4,18 +4,18 @@ interface FooterProps {
   color: "primary" | "secondary";
 }
 export const Footer = ({ color }: FooterProps) => {
+  const year = new Date().getFullYear();
   const theme = useTheme();
   return (
     <Box
+      id={"footer"}
       sx={{
         py: 3,
-        backgroundColor:
-          color === "primary"
-            ? theme.palette.background.paper
-            : theme.palette.background.default,
+        color: theme.palette[color].contrastText,
+        backgroundColor: theme.palette.primary.main,
       }}
     >
-      <Container maxWidth="md">Footer</Container>
+      <Container maxWidth="md">© {year} All rights reserved.</Container>
     </Box>
   );
 };

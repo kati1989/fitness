@@ -11,42 +11,8 @@ import {
 import { useParams } from "react-router-dom";
 import { GymMap } from "./components/GymMap";
 import { SubscriptionCard } from "@/pages/Gyms/views/Gym/components/SubscriptionCard";
-
-// Mock data for gym details
-// const mockGymData = {
-//   id: 1,
-//   name: "Elite Fitness Gym",
-//   description:
-//     "Achieve your fitness goals with state-of-the-art equipment, expert trainers, and a welcoming community.",
-//   location: "Bucuresti, Strada Aviatorilor, Nr 2",
-//   primary_phone_contact: "+40 747 033 345",
-//   primary_email_contact: "elitefitness@gyms.ro",
-//   image:
-//     "https://theironoffice.com/cdn/shop/files/Gym_12.23-19.jpg?v=1701994187&width=3840",
-//   comments: [
-//     "Great gym with excellent facilities.",
-//     "The trainers are very professional and helpful.",
-//     "Amazing environment for fitness enthusiasts!",
-//   ],
-//   rank: 4.5,
-//   subscriptions: [
-//     {
-//       plan: "Basic Plan",
-//       price: "$30/month",
-//       duration: "1 month",
-//     },
-//     {
-//       plan: "Premium Plan",
-//       price: "$50/month",
-//       duration: "1 month",
-//     },
-//     {
-//       plan: "Annual Plan",
-//       price: "$500/year",
-//       duration: "12 months",
-//     },
-//   ],
-// };
+import { Comment } from "./components/Comment";
+import { CommentCarousel } from "./components/CommentCarousel/CommentCarousel";
 
 export const Gym = () => {
   const { id } = useParams();
@@ -113,25 +79,32 @@ export const Gym = () => {
             pb: 1,
           }}
         >
-          <Rating
-            name="size-small"
-            defaultValue={4.5}
-            precision={0.5}
-            size="large"
-            sx={{
-              color: theme.palette.background.default,
-              "& .MuiRating-iconEmpty": {
-                color: (theme) => theme.palette.background.default,
-              },
-            }}
-          />
+          {data?.score ? (
+            <Rating
+              name="size-small"
+              defaultValue={data.score}
+              precision={0.5}
+              size="large"
+              sx={{
+                color: theme.palette.background.default,
+                "& .MuiRating-iconEmpty": {
+                  color: (theme) => theme.palette.background.default,
+                },
+              }}
+            />
+          ) : (
+            <Typography color="#fff" variant="h6" fontWeight={"bold"}>
+              No feedback yet! Be the first to make an impact.
+            </Typography>
+          )}
         </Box>
       </Box>
-      <Box
+      <Stack
         sx={{
           backgroundColor: theme.palette.background.default,
           py: 3,
           mt: "600px",
+          gap: 6,
         }}
       >
         <Container maxWidth={"lg"}>
@@ -154,15 +127,11 @@ export const Gym = () => {
                 sx={{ display: "flex", alignContent: "center", mt: 10 }}
                 spacing={2}
               >
-                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
-                  <SubscriptionCard />
-                </Grid>
-                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
-                  <SubscriptionCard />
-                </Grid>
-                <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
-                  <SubscriptionCard />
-                </Grid>
+                {data?.memberships?.map((membership) => (
+                  <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
+                    <SubscriptionCard membership={membership} />
+                  </Grid>
+                ))}
               </Grid>
             </Stack>
           </Stack>
@@ -170,7 +139,28 @@ export const Gym = () => {
         <Box sx={{ height: "400px" }}>
           <GymMap lat={0} lng={0} name={""} />
         </Box>
-      </Box>
+        <Container maxWidth={"lg"}>
+          <Stack alignItems={"center"} spacing={3}>
+            {data?.comments && (
+              <>
+                <Typography variant="h2" color="primary">
+                  Customer's{" "}
+                  <b
+                    style={{
+                      backgroundColor: theme.palette.primary.main,
+                      color: theme.palette.background.default,
+                      padding: 8,
+                    }}
+                  >
+                    Review
+                  </b>
+                </Typography>
+                <CommentCarousel comments={data?.comments} />
+              </>
+            )}
+          </Stack>
+        </Container>
+      </Stack>
     </>
   );
 };
