@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import client from "./api-client";
 
+interface UserMembershipResponse {
+  type: string;
+  expiration: string;
+  gym: {
+    id: string;
+    name: string;
+  };
+}
+
 interface User {
   userId: string;
   firstname: string;
@@ -9,6 +18,7 @@ interface User {
   role?: string;
   profileImage?: string;
   about?: string;
+  memberships: UserMembershipResponse[];
 }
 
 interface UserResponse {

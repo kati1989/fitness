@@ -41,6 +41,9 @@ export type NewGymMembership = typeof gymMembershipSchema.$inferInsert;
 export type GymScore = typeof gymScoreSchema.$inferSelect;
 export type NewGymScore = typeof gymScoreSchema.$inferInsert;
 
+export type UesrMembership = typeof userMembershipSchema.$inferSelect;
+export type NewUserMembership = typeof userMembershipSchema.$inferInsert;
+
 class DBLogger implements drizzleLogger {
   logQuery(query: string, params: unknown[]): void {
     console.log(`SQL Query: ${query}`);
@@ -59,6 +62,7 @@ export const {
   userInfoSchema,
   gymMembershipSchema,
   gymScoreSchema,
+  userMembershipSchema,
 } = dbSchema;
 
 export { DB_ERRORS };

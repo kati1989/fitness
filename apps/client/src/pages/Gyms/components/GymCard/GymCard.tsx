@@ -6,7 +6,6 @@ import {
   Button,
   Box,
   Rating,
-  useTheme,
 } from "@mui/material";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { useNavigate } from "react-router-dom";
@@ -16,9 +15,15 @@ interface GymCardProps {
   title: string;
   description: string;
   gymId: string;
+  score: number;
 }
-export const GymCard = ({ image, title, description, gymId }: GymCardProps) => {
-  const theme = useTheme();
+export const GymCard = ({
+  image,
+  title,
+  description,
+  gymId,
+  score,
+}: GymCardProps) => {
   const navigate = useNavigate();
 
   const goToGym = () => {
@@ -60,8 +65,9 @@ export const GymCard = ({ image, title, description, gymId }: GymCardProps) => {
         </Button>
         <Rating
           name="size-small"
-          defaultValue={4.5}
+          defaultValue={score}
           precision={0.5}
+          readOnly
           // sx={{
           //   color: theme.palette.primary.main,
           //   "& .MuiRating-iconEmpty": {

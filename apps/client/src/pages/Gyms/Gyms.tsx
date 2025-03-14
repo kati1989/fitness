@@ -31,6 +31,7 @@ export const Gyms = () => {
               }
               title={gym.name}
               description={gym.description || "No description available."}
+              score={gym.score || 5}
             />
           </Grid>
         ))}

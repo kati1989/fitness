@@ -11,9 +11,11 @@ import { v4 as uuid } from "uuid";
 import { User, UserInfo } from "@server/database/database";
 import { mergeUserAndUserInfo } from "@server/utils/user";
 import { UserRole } from "@server/schema/role";
+import { UserMembershipRepository } from "@server/repository/user-membership";
 
 const userRepository = new UserRepository();
 const userInfoRepository = new UserInfoRepository();
+const userMembershipRepository = new UserMembershipRepository();
 
 export const getAllUsers = async (c: Context) => {
   const response: CommonResponse<UserResponse[]> = {
@@ -205,8 +207,20 @@ export const fetchUser = async (c: Context): Promise<UserResponse> => {
     throw new Error(`Error retrieving user info: ${(error as Error).message}`);
   }
 
+  let memberships;
   try {
-    return mergeUserAndUserInfo(user, userInfo);
+    memberships = await userMembershipRepository.findByUserIdWithMemberships(
+      user.id
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      `Error retrieving user memberships: ${(error as Error).message}`
+    );
+  }
+
+  try {
+    return mergeUserAndUserInfo(user, userInfo, memberships);
   } catch (error) {
     throw new Error(`Error merging user data: ${(error as Error).message}`);
   }

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import client from "./api-client";
 import { UserImageAndName } from "./use-user";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "@/contexts/SnackbarContext";
 
 export interface Comment {
   user: UserImageAndName;
@@ -10,6 +12,7 @@ export interface Comment {
 
 interface Gym {
   id: string;
+  hasUserMemberships: boolean;
   name: string;
   location: string;
   primary_phone_contact: string;
@@ -43,6 +46,19 @@ interface GymResponse {
     gym: Gym;
   };
   errors: string[];
+}
+
+interface CreateResponse {
+  data?: {
+    success: boolean;
+  };
+  errors?: string[];
+}
+
+interface LetReviewRequest {
+  gymId: string;
+  comment: string;
+  rating: number;
 }
 
 export const useGyms = () => {
@@ -108,4 +124,50 @@ export const useGym = (id: string) => {
   }, [id]);
 
   return { data, isError, isLoading };
+};
+
+export const useLetReview = () => {
+  const [data, setData] = useState<CreateResponse | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { openSnackbar } = useSnackbar();
+
+  const sendRequest = useCallback(
+    async ({ gymId, comment, rating }: LetReviewRequest) => {
+      setIsLoading(true);
+      setIsError(false);
+
+      try {
+        const result = await client.gym.review.$post({
+          json: {
+            gym_id: gymId,
+            comment,
+            score: rating,
+          },
+        });
+
+        const response: CreateResponse = await result.json();
+        setData(response);
+
+        if (response.data?.success) {
+          openSnackbar("Review added successfully!", "success");
+          navigate("/");
+        }
+
+        if (response.errors?.length) {
+          openSnackbar("An error occurred.", "error");
+          setIsError(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [navigate, openSnackbar]
+  );
+
+  return { data, isError, isLoading, sendRequest };
 };

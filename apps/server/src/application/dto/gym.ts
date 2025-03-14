@@ -21,6 +21,7 @@ export interface GetComments {
 export interface GetGymResponse {
   gym: {
     id: string;
+    hasUserMemberships: boolean;
     name: string;
     location: string;
     primary_phone_contact: string;
@@ -29,12 +30,14 @@ export interface GetGymResponse {
     description?: string;
     created_at: string;
     updated_at: string;
+    score?: number;
   };
 }
 
 export interface GetGymResponseWithMembershipAndComments {
   gym: {
     id: string;
+    hasUserMemberships: boolean;
     name: string;
     location: string;
     primary_phone_contact: string;

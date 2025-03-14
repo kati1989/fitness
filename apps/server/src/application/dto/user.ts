@@ -2,6 +2,15 @@ export interface CreateUserResponse {
   success: boolean;
 }
 
+export interface UserMembershipResponse {
+  type: string;
+  expiration: string;
+  gym: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface UserResponse {
   userId: string;
   firstname: string;
@@ -10,6 +19,7 @@ export interface UserResponse {
   role?: string;
   profileImage?: string;
   about?: string;
+  memberships: UserMembershipResponse[];
 }
 
 export interface UserImageAndNameResponse {

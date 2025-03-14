@@ -19,6 +19,7 @@ import StarIcon from "@mui/icons-material/Star";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "@/services/use-user";
+import { NoData } from "@/components/NoData";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -154,21 +155,26 @@ export const Profile = () => {
               <Typography variant="h6" fontWeight="bold" gutterBottom>
                 Recent Activity
               </Typography>
-              <List>
-                {user.workouts
-                  .filter((workout) => workout.date)
-                  .map((workout) => (
-                    <ListItem key={workout.description} divider>
-                      <FitnessCenterIcon
-                        sx={{ color: "primary.main", mr: 2 }}
-                      />
-                      <ListItemText
-                        primary={workout.description}
-                        secondary={workout.date}
-                      />
-                    </ListItem>
-                  ))}
-              </List>
+
+              {user.workouts.length > 0 ? (
+                <List>
+                  {user.workouts
+                    .filter((workout) => workout.date)
+                    .map((workout) => (
+                      <ListItem key={workout.description} divider>
+                        <FitnessCenterIcon
+                          sx={{ color: "primary.main", mr: 2 }}
+                        />
+                        <ListItemText
+                          primary={workout.description}
+                          secondary={workout.date}
+                        />
+                      </ListItem>
+                    ))}
+                </List>
+              ) : (
+                <NoData label="You have no activity yet!" />
+              )}
             </CardContent>
           </Box>
         </Grid>
@@ -178,28 +184,36 @@ export const Profile = () => {
               <Typography variant="h6" fontWeight="bold" gutterBottom>
                 Active Subscriptions
               </Typography>
-              <List>
-                {user.activeSubscriptions.map((subscription) => (
-                  <ListItem key={subscription.name} divider>
-                    <NavLink
-                      to={`/gyms/${subscription.gym.id}`}
-                      style={{ color: "#020202" }}
+              {userInfo?.memberships && userInfo?.memberships.length > 0 ? (
+                <List>
+                  {userInfo?.memberships.map((membership) => (
+                    <ListItem
+                      key={membership.gym.name}
+                      divider
+                      sx={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      <ListItemText
-                        primary={subscription.name}
-                        secondary={`Expires on ${subscription.expiryDate}`}
+                      <NavLink
+                        to={`/gyms/${membership.gym.id}`}
+                        style={{ color: "#020202" }}
+                      >
+                        <ListItemText
+                          primary={membership.gym.name}
+                          secondary={`Expires on ${membership.expiration}`}
+                        />
+                      </NavLink>
+                      <Chip
+                        icon={<MonetizationOnIcon />}
+                        label={membership.type}
+                        color={
+                          membership.type === "PREMIUM" ? "warning" : "info"
+                        }
                       />
-                    </NavLink>
-                    <Chip
-                      icon={<MonetizationOnIcon />}
-                      label={subscription.type}
-                      color={
-                        subscription.type === "Premium" ? "warning" : "info"
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
+                    </ListItem>
+                  ))}
+                </List>
+              ) : (
+                <NoData label="You have no subscriptions yet!" />
+              )}
             </CardContent>
           </Box>
         </Grid>

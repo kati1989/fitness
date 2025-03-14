@@ -1,5 +1,11 @@
-import { User, UserInfo } from "@server/database/database";
-import { UserResponse } from "@server/dto/user";
+import {
+  GymMembership,
+  UesrMembership,
+  User,
+  UserInfo,
+} from "@server/database/database";
+import { UserMembershipResponse, UserResponse } from "@server/dto/user";
+import { UserMembershipWithDetails } from "@server/repository/user-membership";
 
 export interface UserForPage {
   firstname: string;
@@ -18,7 +24,8 @@ export const mapUserToUserForPage = (user: UserResponse): UserForPage => {
 
 export const mergeUserAndUserInfo = (
   user: User,
-  userInfo: UserInfo
+  userInfo: UserInfo,
+  memberships?: UserMembershipWithDetails[]
 ): UserResponse => {
   return {
     userId: user.id,
@@ -28,5 +35,19 @@ export const mergeUserAndUserInfo = (
     role: userInfo?.role,
     profileImage: userInfo?.profile_image,
     about: userInfo?.about,
+    memberships: mapMemberships(memberships!),
   };
+};
+
+export const mapMemberships = (
+  memberships: UserMembershipWithDetails[]
+): UserMembershipResponse[] => {
+  return memberships.map((membership) => ({
+    type: membership.type,
+    expiration: new Date().toISOString(),
+    gym: {
+      id: membership.gymId,
+      name: membership.gymName,
+    },
+  }));
 };

@@ -4,16 +4,19 @@ import { theme } from "./theme";
 import { ErrorProvider } from "./contexts/ErrorContext";
 import "leaflet/dist/leaflet.css";
 import { AuthProvider } from "./contexts/AuthContext";
+import { SnackbarProvider } from "./contexts/SnackbarContext";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <ErrorProvider>
-          <AppRouter />
-        </ErrorProvider>
-      </AuthProvider>
+      <SnackbarProvider>
+        <AuthProvider>
+          <ErrorProvider>
+            <AppRouter />
+          </ErrorProvider>
+        </AuthProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

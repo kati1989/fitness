@@ -17,14 +17,45 @@ import {
   Gym,
   GymMembership,
   GymScore,
+  NewGymScore,
   UserInfo,
 } from "@server/database/database";
+import { UserMembershipRepository } from "@server/repository/user-membership";
 
 const gymRepository = new GymRepository();
 const gymMembershipRepository = new GymMembershipRepository();
+const userMembershipRepository = new UserMembershipRepository();
 const gymScoreRepository = new GymScoreRepository();
 const userRepository = new UserRepository();
 const userInfoRepository = new UserInfoRepository();
+
+export const createGymMembershipReviewHandler = async (c: Context) => {
+  const { gym_id, score, comment } = await c.req.json();
+  const authenticatedUser = await c.get("user");
+  const id = uuid();
+
+  const newGymScore: NewGymScore = {
+    id,
+    gym_id,
+    user_id: authenticatedUser.id,
+    score,
+    comment,
+  };
+
+  const response: CommonResponse<CreateGymResponse> = {
+    data: undefined,
+    errors: [],
+  };
+
+  try {
+    await gymScoreRepository.create(newGymScore);
+    response.data = { success: true };
+    return c.json(response, 200);
+  } catch (error) {
+    response.errors.push((error as Error).message);
+    return c.json(response, 500);
+  }
+};
 
 export const createGymHandler = async (c: Context) => {
   const {
@@ -65,7 +96,6 @@ export const createGymHandler = async (c: Context) => {
     return c.json(response, 500);
   }
 };
-
 export const getAllGymsHandler = async (c: Context) => {
   const response: CommonResponse<GetGymsResponse> = {
     data: undefined,
@@ -75,18 +105,34 @@ export const getAllGymsHandler = async (c: Context) => {
   try {
     const gyms = await gymRepository.findAll();
 
+    const gymScoresPromises = gyms.map(async (gym: Gym) => {
+      const gymScore = await gymScoreRepository.findByGymId(gym.id);
+      return {
+        gymId: gym.id,
+        score: calculateGymScore(gymScore) ?? 0,
+      };
+    });
+
+    const gymScores = await Promise.all(gymScoresPromises);
+
     response.data = {
-      gyms: gyms.map((gym: Gym) => ({
-        id: gym.id,
-        name: gym.name,
-        location: gym.location,
-        image: gym.image ?? undefined,
-        primary_phone_contact: gym.primary_phone_contact,
-        primary_email_contact: gym.primary_email_contact,
-        description: gym.description ?? undefined,
-        created_at: gym.created_at.toISOString(),
-        updated_at: gym.updated_at ? gym.updated_at.toISOString() : "",
-      })),
+      gyms: gyms.map((gym: Gym) => {
+        const gymScore =
+          gymScores.find((score) => score.gymId === gym.id)?.score ?? 0;
+
+        return {
+          id: gym.id,
+          score: gymScore,
+          name: gym.name,
+          location: gym.location,
+          image: gym.image ?? undefined,
+          primary_phone_contact: gym.primary_phone_contact,
+          primary_email_contact: gym.primary_email_contact,
+          description: gym.description ?? undefined,
+          created_at: gym.created_at.toISOString(),
+          updated_at: gym.updated_at ? gym.updated_at.toISOString() : "",
+        };
+      }),
     };
 
     return c.json(response, 200);
@@ -98,6 +144,8 @@ export const getAllGymsHandler = async (c: Context) => {
 
 export const getGymHandler = async (c: Context) => {
   const id = c.req.param("id");
+  const authenticatedUser = await c.get("user");
+
   const response: CommonResponse<GetGymResponseWithMembershipAndComments> = {
     data: undefined,
     errors: [],
@@ -106,6 +154,21 @@ export const getGymHandler = async (c: Context) => {
   if (!id) {
     response.errors.push("Invalid ID.");
     return c.json(response, 400);
+  }
+
+  let userMemberships;
+  try {
+    userMemberships = await userMembershipRepository.findByUserIdAndGymId(
+      authenticatedUser.id,
+      id
+    );
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      `Error retrieving user ${authenticatedUser} memberships for gym ${id}: ${
+        (error as Error).message
+      }`
+    );
   }
 
   try {
@@ -122,6 +185,7 @@ export const getGymHandler = async (c: Context) => {
 
     response.data = {
       gym: {
+        hasUserMemberships: userMemberships.length > 0,
         id: gym.id,
         name: gym.name,
         location: gym.location,

@@ -11,8 +11,8 @@ import {
 import { useParams } from "react-router-dom";
 import { GymMap } from "./components/GymMap";
 import { SubscriptionCard } from "@/pages/Gyms/views/Gym/components/SubscriptionCard";
-import { Comment } from "./components/Comment";
 import { CommentCarousel } from "./components/CommentCarousel/CommentCarousel";
+import { GiveReview } from "./components/GiveReview";
 
 export const Gym = () => {
   const { id } = useParams();
@@ -102,13 +102,13 @@ export const Gym = () => {
       <Stack
         sx={{
           backgroundColor: theme.palette.background.default,
-          py: 3,
-          mt: "600px",
+          mt: "550px",
           gap: 6,
         }}
       >
         <Container maxWidth={"lg"}>
-          <Stack gap={4}>
+          {data?.hasUserMemberships && <GiveReview gymId={id!} />}
+          <Stack gap={4} sx={{ mt: "50px" }}>
             <Stack gap={2}>
               <Stack textAlign={"center"} gap={1}>
                 <Typography variant="body1" fontWeight={"bold"} color="primary">
@@ -128,7 +128,11 @@ export const Gym = () => {
                 spacing={2}
               >
                 {data?.memberships?.map((membership) => (
-                  <Grid size={{ lg: 4, md: 6, sm: 12 }} sx={{ margin: "auto" }}>
+                  <Grid
+                    size={{ lg: 4, md: 6, sm: 12 }}
+                    sx={{ margin: "auto" }}
+                    key={membership.description}
+                  >
                     <SubscriptionCard membership={membership} />
                   </Grid>
                 ))}
@@ -141,7 +145,7 @@ export const Gym = () => {
         </Box>
         <Container maxWidth={"lg"}>
           <Stack alignItems={"center"} spacing={3}>
-            {data?.comments && (
+            {data?.comments && data?.comments?.length > 0 && (
               <>
                 <Typography variant="h2" color="primary">
                   Customer's{" "}
