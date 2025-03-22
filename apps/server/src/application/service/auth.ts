@@ -58,7 +58,6 @@ export const changeSettingsHandler = async (c: Context) => {
   if (!authToken) {
     return c.redirect(`${Constants.env.HOME_UI}/log-in`, 303);
   }
-  console.log(profilePicture);
 
   if (!firstname && !lastname && !newPassword && !profilePicture) {
     errors.push("Update data in order to change fields 1");
@@ -68,7 +67,7 @@ export const changeSettingsHandler = async (c: Context) => {
     );
   }
 
-  if (profilePicture === typeof "string" && profilePicture.length > 0) {
+  if (typeof profilePicture === "string" && profilePicture.length > 0) {
     try {
       await performUserUpdate(c, { profileImage: profilePicture });
     } catch (error) {

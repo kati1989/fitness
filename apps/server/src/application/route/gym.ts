@@ -6,6 +6,7 @@ import {
   updateGymHandler,
   deleteGymHandler,
   createGymMembershipReviewHandler,
+  getMembershipHandler,
 } from "../service/gym";
 import { authenticateJWT } from "@server/middleware/authMiddleware";
 
@@ -16,6 +17,6 @@ const gymRoutes = new Hono()
   .get("/", getAllGymsHandler)
   .get("/:id", getGymHandler)
   .put("/:id", updateGymHandler)
-  .delete("/:id", deleteGymHandler);
-
+  .delete("/:id", deleteGymHandler)
+  .get("/membership/:id", getMembershipHandler);
 export default gymRoutes;

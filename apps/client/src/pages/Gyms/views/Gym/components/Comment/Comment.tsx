@@ -1,5 +1,12 @@
-import { Card } from "@/components/Card";
-import { Avatar, CardHeader, Rating, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardHeader,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 interface CommentProps {
   imageUrl?: string | null;
@@ -14,17 +21,8 @@ export const Comment = ({
   comment,
 }: CommentProps) => {
   return (
-    <Card variant="secondary">
+    <Box bgcolor={grey[50]} p={2}>
       <Stack spacing={2}>
-        <Stack gap={1}>
-          {comment && (
-            <Typography variant="body2">
-              <b>
-                <i>"{comment}"</i>
-              </b>
-            </Typography>
-          )}
-        </Stack>
         <CardHeader
           sx={{ p: 0 }}
           avatar={
@@ -34,8 +32,17 @@ export const Comment = ({
           }
           title={userName}
         />
+        <Stack gap={1}>
+          {comment && (
+            <Typography variant="body2">
+              <b>
+                <i>"{comment}"</i>
+              </b>
+            </Typography>
+          )}
+        </Stack>
         <Rating name="read-only" value={score} precision={0.5} readOnly />
       </Stack>
-    </Card>
+    </Box>
   );
 };

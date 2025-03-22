@@ -8,7 +8,7 @@ import {
   UserResponse,
 } from "@server/dto/user";
 import { v4 as uuid } from "uuid";
-import { User, UserInfo } from "@server/database/database";
+import { NewUserMembership, User, UserInfo } from "@server/database/database";
 import { mergeUserAndUserInfo } from "@server/utils/user";
 import { UserRole } from "@server/schema/role";
 import { UserMembershipRepository } from "@server/repository/user-membership";
@@ -115,6 +115,8 @@ export const performUserUpdate = async (
   let user;
   try {
     const authenticatedUser = c.get("user");
+
+    console.log(authenticatedUser);
     const users = await userRepository.findByEmail(authenticatedUser.email);
     user = users[0];
     if (!user) throw new Error("User not found.");
@@ -223,5 +225,47 @@ export const fetchUser = async (c: Context): Promise<UserResponse> => {
     return mergeUserAndUserInfo(user, userInfo, memberships);
   } catch (error) {
     throw new Error(`Error merging user data: ${(error as Error).message}`);
+  }
+};
+
+export const addMembership = async (c: Context) => {
+  const response: CommonResponse<CreateUserResponse> = {
+    data: undefined,
+    errors: [],
+  };
+
+  try {
+    const { membershipId } = await c.req.json();
+    await performAddMembership(c, membershipId);
+    response.data = { success: true };
+    return c.json(response, 200);
+  } catch (error) {
+    console.log(error);
+    response.errors.push((error as Error).message);
+    return c.json(response, 500);
+  }
+};
+const performAddMembership = async (c: Context, membershipId: string) => {
+  let user;
+  try {
+    const authenticatedUser = c.get("user");
+    const users = await userRepository.findByEmail(authenticatedUser.email);
+    user = users[0];
+    if (!user) throw new Error("User not found.");
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error retrieving user: ${(error as Error).message}`);
+  }
+
+  try {
+    const newUserMembership: NewUserMembership = {
+      id: uuid(),
+      user_id: user.id,
+      membership_id: membershipId,
+    };
+    await userMembershipRepository.create(newUserMembership);
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Error adding membership: ${(error as Error).message}`);
   }
 };

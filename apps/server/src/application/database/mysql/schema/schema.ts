@@ -107,3 +107,70 @@ export default class MySQLSchema implements DatabaseSchema {
   userMembershipSchema = userMembershipSchema;
   gymMembershipSchema = gymMembershipSchema;
 }
+
+// export const getGymHandler = async (c: Context) => {
+//   const id = c.req.param("id");
+//   const authenticatedUser = await c.get("user");
+
+//   const response: CommonResponse<GetGymResponseWithMembershipAndComments> = {
+//     data: undefined,
+//     errors: [],
+//   };
+
+//   if (!id) {
+//     response.errors.push("Invalid ID.");
+//     return c.json(response, 400);
+//   }
+
+//   let userMemberships;
+//   try {
+//     userMemberships = await userMembershipRepository.findByUserIdAndGymId(
+//       authenticatedUser.id,
+//       id
+//     );
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error(
+//       `Error retrieving user ${authenticatedUser} memberships for gym ${id}: ${
+//         (error as Error).message
+//       }`
+//     );
+//   }
+
+//   try {
+//     const gyms = await gymRepository.findById(id);
+
+//     if (gyms.length === 0) {
+//       response.errors.push("Gym not found.");
+//       return c.json(response, 404);
+//     }
+//     const gym = gyms[0];
+//     const gymMemberships = await gymMembershipRepository.findByGymId(gym.id);
+
+//     const gymScores = await gymScoreRepository.findByGymId(gym.id);
+
+//     response.data = {
+//       gym: {
+//         hasUserMemberships: userMemberships.length > 0,
+//         id: gym.id,
+//         name: gym.name,
+//         location: gym.location,
+//         image: gym.image ?? undefined,
+//         primary_phone_contact: gym.primary_phone_contact,
+//         primary_email_contact: gym.primary_email_contact,
+//         description: gym.description ?? undefined,
+//         created_at: gym.created_at.toISOString(),
+//         updated_at: gym.updated_at ? gym.updated_at.toISOString() : "",
+//         score: calculateGymScore(gymScores)!,
+//         comments: await mapComments(gymScores),
+//         memberships: mapMemberships(gymMemberships),
+//       },
+//     };
+
+//     return c.json(response, 200);
+//   } catch (error) {
+//     console.log(error);
+//     response.errors.push((error as Error).message);
+//     return c.json(response, 500);
+//   }
+// };

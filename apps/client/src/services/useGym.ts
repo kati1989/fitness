@@ -12,7 +12,7 @@ export interface Comment {
 
 interface Gym {
   id: string;
-  hasUserMemberships: boolean;
+  hasUserMemberships?: boolean;
   name: string;
   location: string;
   primary_phone_contact: string;
@@ -27,6 +27,7 @@ interface Gym {
 }
 
 export interface Membership {
+  id: string;
   type: string;
   monthly_price: number;
   yearly_price: string;
@@ -48,7 +49,7 @@ interface GymResponse {
   errors: string[];
 }
 
-interface CreateResponse {
+export interface CreateResponse {
   data?: {
     success: boolean;
   };
@@ -59,6 +60,15 @@ interface LetReviewRequest {
   gymId: string;
   comment: string;
   rating: number;
+}
+
+interface MembershipWithGym {
+  membership: Membership;
+  gym: Gym;
+}
+interface MembershipWithGymResponse {
+  data?: MembershipWithGym;
+  errors?: string[];
 }
 
 export const useGyms = () => {
@@ -170,4 +180,43 @@ export const useLetReview = () => {
   );
 
   return { data, isError, isLoading, sendRequest };
+};
+
+export const useMembership = (id: string) => {
+  const [data, setData] = useState<MembershipWithGym | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+      setIsError(false);
+
+      try {
+        const result = await client.gym.membership[":id"].$get({
+          param: { id: id },
+        });
+
+        const response: MembershipWithGymResponse = await result.json();
+
+        if (response.data) {
+          setData(response.data);
+        } else {
+          setIsError(true);
+        }
+
+        if (response.errors && response.errors?.length > 0) {
+          setIsError(true);
+        }
+      } catch {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetch();
+  }, [id]);
+
+  return { data, isError, isLoading };
 };

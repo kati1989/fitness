@@ -6,6 +6,7 @@ import {
   GetComments,
   GetGymResponseWithMembershipAndComments,
   GetGymsResponse,
+  GetMembershipWithGymResponse,
 } from "../dto/gym";
 import { v4 as uuid } from "uuid";
 import { GymMembershipRepository } from "../repository/gym-membership";
@@ -256,6 +257,7 @@ export const deleteGymHandler = async (c: Context) => {
 
 const mapMemberships = (memberships: GymMembership[]) => {
   return memberships.map((membership) => ({
+    id: membership.id,
     type: membership.type,
     monthly_price: membership.monthly_price,
     yearly_price: membership.yearly_price,
@@ -295,4 +297,73 @@ const getScoreWithUser = async (score: GymScore) => {
   };
 
   return comment;
+};
+
+export const getMembershipHandler = async (c: Context) => {
+  const id = c.req.param("id");
+  const response: CommonResponse<GetMembershipWithGymResponse> = {
+    data: undefined,
+    errors: [],
+  };
+
+  if (!id) {
+    response.errors.push("Invalid ID.");
+    return c.json(response, 400);
+  }
+
+  let gymMembership;
+
+  try {
+    const gymMemberships = await gymMembershipRepository.findById(id);
+
+    if (gymMemberships.length === 0) {
+      response.errors.push("Gym membership not found.");
+      return c.json(response, 404);
+    }
+    gymMembership = gymMemberships[0];
+  } catch (error) {
+    response.errors.push((error as Error).message);
+    return c.json(response, 500);
+  }
+
+  console.log("Gym membership", gymMembership);
+
+  let gym;
+
+  try {
+    const gyms = await gymRepository.findById(gymMembership.gym_id);
+
+    if (gyms.length === 0) {
+      response.errors.push("Gym not found.");
+      return c.json(response, 404);
+    }
+    gym = gyms[0];
+  } catch (error) {
+    response.errors.push((error as Error).message);
+    return c.json(response, 500);
+  }
+
+  response.data = {
+    membership: {
+      id: gymMembership.id,
+      type: gymMembership.type,
+      monthly_price: gymMembership.monthly_price,
+      yearly_price: gymMembership.yearly_price,
+      description: gymMembership.description,
+      short_description: gymMembership.short_description,
+    },
+    gym: {
+      id: gym.id,
+      name: gym.name,
+      location: gym.location,
+      primary_phone_contact: gym.primary_phone_contact,
+      primary_email_contact: gym.primary_email_contact,
+      image: gym.image ?? undefined,
+      description: gym.description ?? undefined,
+      created_at: gym.created_at,
+      updated_at: gym.updated_at ? gym.updated_at.toISOString() : "",
+    },
+  };
+
+  return c.json(response, 200);
 };

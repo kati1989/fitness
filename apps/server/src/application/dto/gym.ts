@@ -5,6 +5,7 @@ export interface CreateGymResponse {
 }
 
 export interface GetMembership {
+  id: string;
   type: string;
   monthly_price: number;
   yearly_price: string;
@@ -21,7 +22,7 @@ export interface GetComments {
 export interface GetGymResponse {
   gym: {
     id: string;
-    hasUserMemberships: boolean;
+    hasUserMemberships?: boolean;
     name: string;
     location: string;
     primary_phone_contact: string;
@@ -32,6 +33,11 @@ export interface GetGymResponse {
     updated_at: string;
     score?: number;
   };
+}
+
+export interface GetMembershipWithGymResponse {
+  membership: GetMembership;
+  gym: GetGymResponse["gym"];
 }
 
 export interface GetGymResponseWithMembershipAndComments {

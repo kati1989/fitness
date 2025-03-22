@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import {
+  addMembership,
   getAllUsers,
   getShortInfo,
   getUser,
@@ -12,6 +13,7 @@ const userRoutes = new Hono()
   .get("/", getAllUsers)
   .get("/get-short-info", getShortInfo)
   .get("/get-info", getUser)
-  .put("/", updateUser);
+  .put("/", updateUser)
+  .put("/add-membership", addMembership);
 
 export default userRoutes;

@@ -1,3 +1,4 @@
+import { MembershipDuration } from "@/app-router";
 import { Membership } from "@/services/useGym";
 import {
   Box,
@@ -10,6 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,10 +47,17 @@ interface SubscriptionTypeProps {
 }
 export const SubscriptionCard = ({ membership }: SubscriptionTypeProps) => {
   const [value, setValue] = useState(0);
+  const [membershipDurations, setMembershipDurations] =
+    useState<MembershipDuration>("monthly");
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleSubscription = () => {
+    navigate(`/subscription/${membership.id}?duration=${membershipDurations}`);
   };
 
   return (
@@ -67,6 +76,7 @@ export const SubscriptionCard = ({ membership }: SubscriptionTypeProps) => {
             centered
           >
             <Tab
+              onClick={() => setMembershipDurations("monthly")}
               label="Monthly"
               {...a11yProps(0)}
               sx={{
@@ -77,6 +87,7 @@ export const SubscriptionCard = ({ membership }: SubscriptionTypeProps) => {
               }}
             />
             <Tab
+              onClick={() => setMembershipDurations("yearly")}
               label="Yearly"
               {...a11yProps(1)}
               sx={{
@@ -110,6 +121,7 @@ export const SubscriptionCard = ({ membership }: SubscriptionTypeProps) => {
         <Button
           variant="contained"
           sx={{ textTransform: "none", fontWeight: "bold" }}
+          onClick={handleSubscription}
         >
           Get started
         </Button>

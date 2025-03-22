@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import client from "./api-client";
+import { CreateResponse } from "./useGym";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "@/contexts/SnackbarContext";
 
 interface UserMembershipResponse {
   type: string;
@@ -101,4 +104,44 @@ export const useUserShortInfo = () => {
   }, []);
 
   return { data, isError, isLoading };
+};
+export const useAddMembership = () => {
+  const [data, setData] = useState<CreateResponse | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { openSnackbar } = useSnackbar();
+
+  const addMembership = async (membershipId: string) => {
+    setIsLoading(true);
+    setIsError(false);
+
+    try {
+      const result = await client.user["add-membership"].$put({
+        json: { membershipId },
+      });
+
+      const response: CreateResponse = (await result.json()) as CreateResponse;
+      setData(response);
+
+      if (response.data?.success) {
+        openSnackbar(
+          "Congratulations! You have succesfully purchased a new membership!",
+          "success"
+        );
+        navigate("/");
+      }
+
+      if (response.errors?.length) {
+        openSnackbar("An error occurred.", "error");
+        setIsError(true);
+      }
+    } catch {
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { data, addMembership, isError, isLoading };
 };

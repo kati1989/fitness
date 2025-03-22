@@ -1,7 +1,7 @@
 import { Constants } from "@server/utils/constants";
 import { Context, MiddlewareHandler, Next } from "hono";
-import { getSignedCookie } from "hono/cookie";
-import { jwt, verify } from "hono/jwt";
+import { verify } from "hono/jwt";
+import { JWTPayload } from "hono/utils/jwt/types";
 
 export const authenticateJWT: MiddlewareHandler = async (
   c: Context,
@@ -14,6 +14,19 @@ export const authenticateJWT: MiddlewareHandler = async (
     Constants.env.JWT_SECRET!
   );
 
+  c.set("user", authenticatedUser);
+  await next();
+};
+
+export const authenticateJWTFromBody: MiddlewareHandler = async (
+  c: Context,
+  next: Next
+) => {
+  const { authToken } = await c.req.parseBody();
+  const authenticatedUser = await verify(
+    authToken as string,
+    Constants.env.JWT_SECRET!
+  );
   c.set("user", authenticatedUser);
   await next();
 };
