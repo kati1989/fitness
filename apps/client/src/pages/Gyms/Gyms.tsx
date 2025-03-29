@@ -21,7 +21,7 @@ export const Gyms = () => {
         sx={{ display: "flex", alignContent: "center" }}
       >
         {data?.map((gym) => (
-          <Grid size={{ lg: 4, md: 6, sm: 12 }}>
+          <Grid key={gym.id} size={{ lg: 4, md: 6, sm: 12 }}>
             <GymCard
               gymId={gym.id.toString()}
               key={gym.id}

@@ -20,6 +20,7 @@ export interface UserResponse {
   profileImage?: string;
   about?: string;
   memberships: UserMembershipResponse[];
+  memberSince: string;
 }
 
 export interface UserImageAndNameResponse {

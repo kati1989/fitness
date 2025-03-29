@@ -17,9 +17,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Profile } from "@/pages/Profile";
 import { Subscription } from "./pages/Subscription";
 
-const membershipDurations = ["monthly", "yearly"] as const;
-export type MembershipDuration = (typeof membershipDurations)[number];
-
 // Wrapper for public routes
 const PublicRoute = () => {
   const { isAuthenticated } = useAuth();
@@ -54,11 +51,7 @@ export const AppRouter = () => {
           <Route element={<CommonLayout showFooter paddingTop />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/gyms" element={<Gyms />} />
-            {Object.values(membershipDurations).includes(
-              new URLSearchParams(window.location.search).get(
-                "duration"
-              ) as MembershipDuration
-            ) && <Route path="/subscription/:id" element={<Subscription />} />}
+            <Route path="/subscription/:id" element={<Subscription />} />
           </Route>
           <Route element={<CommonLayout showFooter fullScreen />}>
             <Route path="/gyms/:id" element={<Gym />} />

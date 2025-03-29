@@ -36,6 +36,7 @@ export const mergeUserAndUserInfo = (
     profileImage: userInfo?.profile_image,
     about: userInfo?.about,
     memberships: mapMemberships(memberships!),
+    memberSince: user.created_at ?? userInfo.created_at,
   };
 };
 
@@ -44,7 +45,11 @@ export const mapMemberships = (
 ): UserMembershipResponse[] => {
   return memberships.map((membership) => ({
     type: membership.type,
-    expiration: new Date().toISOString(),
+    expiration: new Date(
+      new Date(membership.createdAt).setMonth(
+        new Date(membership.createdAt).getMonth() + 1
+      )
+    ).toISOString(),
     gym: {
       id: membership.gymId,
       name: membership.gymName,

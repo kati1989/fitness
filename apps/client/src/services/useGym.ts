@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import client from "./api-client";
 import { UserImageAndName } from "./use-user";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { useApiClient } from "./api-client";
 
 export interface Comment {
   user: UserImageAndName;
@@ -75,6 +75,7 @@ export const useGyms = () => {
   const [data, setData] = useState<Gym[] | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const client = useApiClient();
 
   useEffect(() => {
     const fetchGyms = async () => {
@@ -107,6 +108,7 @@ export const useGym = (id: string) => {
   const [data, setData] = useState<Gym | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const client = useApiClient();
 
   useEffect(() => {
     const fetchGym = async () => {
@@ -142,6 +144,7 @@ export const useLetReview = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
+  const client = useApiClient();
 
   const sendRequest = useCallback(
     async ({ gymId, comment, rating }: LetReviewRequest) => {
@@ -186,6 +189,7 @@ export const useMembership = (id: string) => {
   const [data, setData] = useState<MembershipWithGym | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const client = useApiClient();
 
   useEffect(() => {
     const fetch = async () => {

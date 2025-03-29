@@ -17,6 +17,7 @@ interface GymCardProps {
   gymId: string;
   score: number;
 }
+
 export const GymCard = ({
   image,
   title,
@@ -31,9 +32,15 @@ export const GymCard = ({
   };
 
   return (
-    <Card>
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <CardMedia component="img" height="180" image={image} alt="Gym Image" />
-      <CardContent>
+      <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <Box display="flex" alignItems="center" gap={1}>
           <FitnessCenterIcon color="primary" />
           <Typography
@@ -49,11 +56,13 @@ export const GymCard = ({
           {description}
         </Typography>
       </CardContent>
+
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         p={2}
+        mt="auto"
       >
         <Button
           size="small"
@@ -61,20 +70,9 @@ export const GymCard = ({
           color="primary"
           onClick={goToGym}
         >
-          details
+          Details
         </Button>
-        <Rating
-          name="size-small"
-          defaultValue={score}
-          precision={0.5}
-          readOnly
-          // sx={{
-          //   color: theme.palette.primary.main,
-          //   "& .MuiRating-iconEmpty": {
-          //     color: (theme) => theme.palette.primary.main,
-          //   },
-          // }}
-        />
+        <Rating name="size-small" value={score} precision={0.5} readOnly />
       </Box>
     </Card>
   );

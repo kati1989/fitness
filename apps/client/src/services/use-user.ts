@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import client from "./api-client";
 import { CreateResponse } from "./useGym";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useApiClient } from "./api-client";
 
 interface UserMembershipResponse {
   type: string;
@@ -22,6 +23,7 @@ interface User {
   profileImage?: string;
   about?: string;
   memberships: UserMembershipResponse[];
+  memberSince: string;
 }
 
 interface UserResponse {
@@ -43,9 +45,12 @@ export const useUser = () => {
   const [data, setData] = useState<User | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const client = useApiClient();
 
   useEffect(() => {
-    const fetchGym = async () => {
+    const fetchUser = async () => {
+      if (!isAuthenticated) return;
       setIsLoading(true);
       setIsError(false);
 
@@ -66,8 +71,8 @@ export const useUser = () => {
       }
     };
 
-    fetchGym();
-  }, []);
+    fetchUser();
+  }, [isAuthenticated]);
 
   return { data, isError, isLoading };
 };
@@ -76,6 +81,7 @@ export const useUserShortInfo = () => {
   const [data, setData] = useState<UserImageAndName | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const client = useApiClient();
 
   useEffect(() => {
     const fetchGym = async () => {
@@ -111,6 +117,7 @@ export const useAddMembership = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { openSnackbar } = useSnackbar();
+  const client = useApiClient();
 
   const addMembership = async (membershipId: string) => {
     setIsLoading(true);

@@ -19,13 +19,13 @@ export const Login = () => {
 
   const { data, isError, isLoading, sendRequest } = useLogin();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       alert("All fields are required");
       return;
     }
 
-    sendRequest({ email, password });
+    await sendRequest({ email, password });
   };
 
   return (

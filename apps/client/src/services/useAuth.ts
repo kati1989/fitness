@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import client from "./api-client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useApiClient } from "./api-client";
 
 interface RegisterRequest {
   firstname: string;
@@ -42,6 +42,7 @@ export const useRegister = () => {
   const [data, setData] = useState<RegisterResponse | null>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const client = useApiClient();
 
   const sendRequest = useCallback(
     async ({ firstname, lastname, email, password }: RegisterRequest) => {
@@ -81,6 +82,7 @@ export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const client = useApiClient();
 
   const sendRequest = useCallback(
     async ({ email, password }: LoginRequest) => {
@@ -97,7 +99,7 @@ export const useLogin = () => {
 
         if (response.data?.token) {
           login(response.data?.token);
-          navigate("/gyms");
+          await navigate("/gyms");
         }
 
         if (response.errors.length > 0) {
@@ -122,6 +124,7 @@ export const useLogout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const client = useApiClient();
 
   const sendRequest = useCallback(async () => {
     setIsLoading(true);

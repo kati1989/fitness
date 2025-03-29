@@ -1,13 +1,15 @@
 import { useMembership } from "@/services/useGym";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Payment } from "./components/payment";
 import { PaymentDetails } from "./components/paymentDetails";
 import { CircularProgress, Grid2 as Grid } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { MembershipDuration } from "@/app-router";
 import { useAddMembership } from "@/services/use-user";
 import { useState } from "react";
 import { PaymentProcessing } from "./components/paymentProcessing";
+
+const membershipDurations = ["monthly", "yearly"] as const;
+export type MembershipDuration = (typeof membershipDurations)[number];
 
 export const Subscription = () => {
   const { id } = useParams();
@@ -21,6 +23,13 @@ export const Subscription = () => {
   const { data, isLoading, isError } = useMembership(id!);
   const { addMembership } = useAddMembership();
 
+  if (
+    !membershipDuration ||
+    !Object.values(membershipDurations).includes(membershipDuration)
+  ) {
+    return <Navigate to={`/gyms`} replace />;
+  }
+
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -29,11 +38,11 @@ export const Subscription = () => {
   }
 
   const submitPayment = () => {
-    setTransactionLoading(true); // Set loading to true before starting the mock payment
+    setTransactionLoading(true);
 
     setTimeout(() => {
-      setTransactionLoading(false); // After 2 seconds, set loading to false
-      addMembership(id!); // Simulate adding the membership after the payment "processes"
+      setTransactionLoading(false);
+      addMembership(id!);
     }, 2000);
   };
 

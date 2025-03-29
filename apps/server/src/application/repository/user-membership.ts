@@ -19,6 +19,7 @@ export interface UserMembershipWithDetails {
   gymId: string;
   gymName: string;
   gymLocation: string;
+  createdAt: string;
 }
 
 export class UserMembershipRepository {
@@ -81,6 +82,7 @@ export class UserMembershipRepository {
         gymId: gymSchema.id,
         gymName: gymSchema.name,
         gymLocation: gymSchema.location,
+        createdAt: userMembershipSchema.created_at,
       })
       .from(userMembershipSchema)
       .innerJoin(
