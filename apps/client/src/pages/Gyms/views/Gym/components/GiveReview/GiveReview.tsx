@@ -88,7 +88,7 @@ export const GiveReview = ({ gymId }: GiveReviewProps) => {
                     name="user-rating"
                     value={rating}
                     onChange={(_, newValue) => setRating(newValue)}
-                    precision={0.5}
+                    precision={1}
                     size="large"
                   />
                 </Box>

@@ -17,21 +17,6 @@ export const userSchema = table("user", {
   updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
 });
 
-export const gymSchema = table("gym", {
-  id: t.text("id").primaryKey(),
-  name: t.text("name").notNull(),
-  location: t.text("location").notNull(),
-  image: t.text("image"),
-  primary_phone_contact: t.text("primary_phone_contact").notNull(),
-  primary_email_contact: t.text("primary_email_contact").notNull(),
-  description: t.text("description"),
-  created_at: t
-    .text("created_at")
-    .default(sql`(current_timestamp)`)
-    .notNull(),
-  updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
-});
-
 export const userInfoSchema = table("user_info", {
   id: t.text("id", { length: 255 }).primaryKey(),
   user_id: t
@@ -48,8 +33,80 @@ export const userInfoSchema = table("user_info", {
   updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
 });
 
+export const gymSchema = table("gym", {
+  id: t.text("id").primaryKey(),
+  name: t.text("name").notNull(),
+  location: t.text("location").notNull(),
+  image: t.text("image"),
+  primary_phone_contact: t.text("primary_phone_contact").notNull(),
+  primary_email_contact: t.text("primary_email_contact").notNull(),
+  description: t.text("description"),
+  created_at: t
+    .text("created_at")
+    .default(sql`(current_timestamp)`)
+    .notNull(),
+  updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
+});
+
+export const userMembershipSchema = table("user_membership", {
+  id: t.text("id", { length: 255 }).primaryKey(),
+  user_id: t
+    .text("user_id", { length: 255 })
+    .notNull()
+    .references(() => userSchema.id),
+  membership_id: t
+    .text("membership_id", { length: 255 })
+    .notNull()
+    .references(() => gymMembershipSchema.id),
+  created_at: t
+    .text("created_at")
+    .default(sql`(current_timestamp)`)
+    .notNull(),
+  updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
+});
+
+export const gymMembershipSchema = table("gym_membership", {
+  id: t.text("id", { length: 255 }).primaryKey(),
+  gym_id: t
+    .text("gym_id", { length: 255 })
+    .notNull()
+    .references(() => gymSchema.id),
+  type: t.text("type", { length: 50 }).notNull(),
+  monthly_price: t.integer("monthly_price").notNull(),
+  yearly_price: t.integer("yearly_price").notNull(),
+  description: t.text("description"),
+  short_description: t.text("short_description", { length: 50 }),
+  created_at: t
+    .text("created_at")
+    .default(sql`(current_timestamp)`)
+    .notNull(),
+  updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
+});
+
+export const gymScoreSchema = table("gym_score", {
+  id: t.text("id", { length: 255 }).primaryKey(),
+  gym_id: t
+    .text("gym_id", { length: 255 })
+    .notNull()
+    .references(() => gymSchema.id),
+  user_id: t
+    .text("user_id", { length: 255 })
+    .notNull()
+    .references(() => userSchema.id),
+  score: t.integer("score").notNull(),
+  comment: t.text("comment"),
+  created_at: t
+    .text("created_at")
+    .default(sql`(current_timestamp)`)
+    .notNull(),
+  updated_at: t.text("updated_at").default(sql`(current_timestamp)`),
+});
+
 export default class SQLiteSchema implements DatabaseSchema {
-  userInfoSchema = null;
-  userSchema = userSchema;
+  userInfoSchema = userInfoSchema;
   gymSchema = gymSchema;
+  gymScoreSchema = gymScoreSchema;
+  userSchema = userSchema;
+  userMembershipSchema = userMembershipSchema;
+  gymMembershipSchema = gymMembershipSchema;
 }

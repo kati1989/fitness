@@ -8,10 +8,10 @@ interface GymMapProps {
   name: string;
 }
 
-export const GymMap: React.FC<GymMapProps> = () => {
+export const GymMap = ({ lat, lng, name }: GymMapProps) => {
   return (
     <MapContainer
-      center={[51.505, -0.09]}
+      center={[lat, lng]}
       zoom={13}
       scrollWheelZoom={false}
       style={{ height: "100%" }}
@@ -20,10 +20,8 @@ export const GymMap: React.FC<GymMapProps> = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
+      <Marker position={[lat, lng]}>
+        <Popup>{name}</Popup>
       </Marker>
     </MapContainer>
   );

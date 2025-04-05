@@ -19,6 +19,11 @@ export const Gym = () => {
   const { data, isError, isLoading } = useGym(id ? id : "2");
   const theme = useTheme();
 
+  const getLocation = (location: string) => {
+    const [lat, lng] = location.split(",").map((coord) => parseFloat(coord));
+    return { lat, lng };
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -140,9 +145,30 @@ export const Gym = () => {
             </Stack>
           </Stack>
         </Container>
-        <Box sx={{ height: "400px" }}>
-          <GymMap lat={0} lng={0} name={""} />
-        </Box>
+        {data?.location && (
+          <>
+            <Typography variant="h2" color="primary" align="center">
+              Where{" "}
+              <b
+                style={{
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.background.default,
+                  padding: 8,
+                }}
+              >
+                You can
+              </b>{" "}
+              find us
+            </Typography>
+            <Box sx={{ height: "400px" }}>
+              <GymMap
+                lat={getLocation(data?.location).lat}
+                lng={getLocation(data?.location).lng}
+                name={data.name}
+              />
+            </Box>
+          </>
+        )}
         <Container maxWidth={"lg"}>
           <Stack alignItems={"center"} spacing={3}>
             {data?.comments && data?.comments?.length > 0 && (

@@ -11,7 +11,6 @@ export const PayCard = ({ bgColor, image }: PayCardProps) => {
       sx={{
         p: 4,
         background: bgColor,
-
         color: "white",
         width: 450,
         borderRadius: 4,
